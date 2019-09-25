@@ -254,13 +254,13 @@
             width: 80,
             dataIndex: 'status_dictText'
           },
-         /* {
-            title: '创建时间',
-            align: "center",
-            width: 150,
-            dataIndex: 'createTime',
-            sorter: true
-          },*/
+          /* {
+             title: '创建时间',
+             align: "center",
+             width: 150,
+             dataIndex: 'createTime',
+             sorter: true
+           },*/
           {
             title: '操作',
             dataIndex: 'action',

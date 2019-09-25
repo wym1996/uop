@@ -6,33 +6,22 @@
       <a-form layout="inline">
         <a-row :gutter="24">
 
-          <!--<a-col :md="6" :sm="8">-->
-            <!--<a-form-item label="父级id">-->
-              <!--<a-input placeholder="请输入父级id" v-model="queryParam.fid"></a-input>-->
-            <!--</a-form-item>-->
-          <!--</a-col>-->
           <a-col :md="6" :sm="8">
-            <a-form-item label="用户名">
-              <a-input placeholder="请输入用户名" v-model="queryParam.username"></a-input>
+            <a-form-item label="角色名称">
+              <a-input placeholder="请输入角色名称" v-model="queryParam.name"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :md="6" :sm="8">
+            <a-form-item label="角色值">
+              <a-input placeholder="请输入角色值" v-model="queryParam.value"></a-input>
             </a-form-item>
           </a-col>
         <template v-if="toggleSearchStatus">
-        <!--<a-col :md="6" :sm="8">-->
-            <!--<a-form-item label="密码">-->
-              <!--<a-input placeholder="请输入密码" v-model="queryParam.password"></a-input>-->
-            <!--</a-form-item>-->
-          <!--</a-col>-->
-          <a-col :md="6" :sm="8">
-            <a-form-item label="身份证号">
-              <a-input placeholder="请输入身份证号" v-model="queryParam.idcard"></a-input>
+        <a-col :md="6" :sm="8">
+            <a-form-item label="角色描述">
+              <a-input placeholder="请输入角色描述" v-model="queryParam.description"></a-input>
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="8">
-            <a-form-item label="所属部门">
-              <a-input placeholder="请输入所属部门" v-model="queryParam.deptname"></a-input>
-            </a-form-item>
-          </a-col>
-
           </template>
           <a-col :md="6" :sm="8" >
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
@@ -51,8 +40,8 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">添加用户</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('用户模块')">导出</a-button>
+      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('角色管理')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -104,23 +93,23 @@
     <!-- table区域-end -->
 
     <!-- 表单区域 -->
-    <user-modal ref="modalForm" @ok="modalFormOk"></user-modal>
+    <role-modal ref="modalForm" @ok="modalFormOk"></role-modal>
   </a-card>
 </template>
 
 <script>
-  import UserModal from './modules/UserModal'
+  import RoleModal from './modules/RoleModal'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 
   export default {
-    name: "UserList",
+    name: "RoleList",
     mixins:[JeecgListMixin],
     components: {
-      UserModal
+      RoleModal
     },
     data () {
       return {
-        description: '用户模块管理页面',
+        description: '角色管理管理页面',
         // 表头
         columns: [
           // {
@@ -133,35 +122,20 @@
           //     return parseInt(index)+1;
           //   }
           //  },
-		   // {
-       //      title: '父级id',
-       //      align:"center",
-       //      dataIndex: 'fid'
-       //     },
 		   {
-            title: '用户名',
+            title: '角色名称',
             align:"center",
-            dataIndex: 'username'
+            dataIndex: 'name'
            },
 		   {
-            title: '密码',
+            title: '角色值',
             align:"center",
-            dataIndex: 'password'
+            dataIndex: 'value'
            },
 		   {
-            title: '身份证号',
+            title: '角色描述',
             align:"center",
-            dataIndex: 'idcard'
-           },
-		   {
-            title: '所属部门',
-            align:"center",
-            dataIndex: 'deptname'
-           },
-		   {
-            title: '所属机构',
-            align:"center",
-            dataIndex: 'affiliation'
+            dataIndex: 'description'
            },
           {
             title: '操作',
@@ -171,11 +145,11 @@
           }
         ],
 		url: {
-          list: "/users/user/list",
-          delete: "/users/user/delete",
-          deleteBatch: "/users/user/deleteBatch",
-          exportXlsUrl: "users/user/exportXls",
-          importExcelUrl: "users/user/importExcel",
+          list: "/role/role/list",
+          delete: "/role/role/delete",
+          deleteBatch: "/role/role/deleteBatch",
+          exportXlsUrl: "role/role/exportXls",
+          importExcelUrl: "role/role/importExcel",
        },
     }
   },

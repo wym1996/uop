@@ -1,8 +1,6 @@
 package org.jeecg.modules.users.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -17,9 +15,11 @@ import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.system.entity.SysUser;
+import org.jeecg.modules.system.entity.SysUserRole;
+import org.jeecg.modules.user_role.entity.UserRole;
+import org.jeecg.modules.user_role.service.IUserRoleService;
 import org.jeecg.modules.users.entity.User;
 import org.jeecg.modules.users.service.IUserService;
-import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -53,6 +53,9 @@ import io.swagger.annotations.ApiOperation;
 public class UserController {
 	@Autowired
 	private IUserService userService;
+	 @Autowired
+	 private IUserRoleService userRoleService;
+
 
 	/**
 	  * 分页列表查询
@@ -196,6 +199,22 @@ public class UserController {
 		return result;
 	}
 
+	 @RequestMapping(value = "/queryUserRole", method = RequestMethod.GET)
+	 public Result<List<String>> queryUserRole(@RequestParam(name = "userid", required = true) String userid) {
+		 Result<List<String>> result = new Result<>();
+		 List<String> list = new ArrayList<String>();
+		 List<UserRole> userRole = userRoleService.list(new QueryWrapper<UserRole>().lambda().eq(UserRole::getUserId, userid));
+		 if (userRole == null || userRole.size() <= 0) {
+			 result.error500("未找到用户相关角色信息");
+		 } else {
+			 for (UserRole userRoles : userRole) {
+				 list.add(userRoles.getRoleId());
+			 }
+			 result.setSuccess(true);
+			 result.setResult(list);
+		 }
+		 return result;
+	 }
   /**
       * 导出excel
    *

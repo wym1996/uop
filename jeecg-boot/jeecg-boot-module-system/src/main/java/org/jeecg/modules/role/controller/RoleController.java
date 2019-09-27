@@ -20,6 +20,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
+import org.jeecg.modules.system.entity.SysRole;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -48,7 +49,7 @@ import io.swagger.annotations.ApiOperation;
 public class RoleController {
 	@Autowired
 	private IRoleService roleService;
-	
+
 	/**
 	  * 分页列表查询
 	 * @param role
@@ -72,7 +73,7 @@ public class RoleController {
 		result.setResult(pageList);
 		return result;
 	}
-	
+
 	/**
 	  *   添加
 	 * @param role
@@ -92,7 +93,7 @@ public class RoleController {
 		}
 		return result;
 	}
-	
+
 	/**
 	  *  编辑
 	 * @param role
@@ -113,10 +114,10 @@ public class RoleController {
 				result.success("修改成功!");
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	  *   通过id删除
 	 * @param id
@@ -134,7 +135,7 @@ public class RoleController {
 		}
 		return Result.ok("删除成功!");
 	}
-	
+
 	/**
 	  *  批量删除
 	 * @param ids
@@ -153,7 +154,7 @@ public class RoleController {
 		}
 		return result;
 	}
-	
+
 	/**
 	  * 通过id查询
 	 * @param id
@@ -173,6 +174,19 @@ public class RoleController {
 		}
 		return result;
 	}
+
+	 @RequestMapping(value = "/queryall", method = RequestMethod.GET)
+	 public Result<List<Role>> queryall() {
+		 Result<List<Role>> result = new Result<>();
+		 List<Role> list = roleService.list();
+		 if(list==null||list.size()<=0) {
+			 result.error500("未找到角色信息");
+		 }else {
+			 result.setResult(list);
+			 result.setSuccess(true);
+		 }
+		 return result;
+	 }
 
   /**
       * 导出excel

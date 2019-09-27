@@ -27,7 +27,7 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 @Accessors(chain = true)
 @ApiModel(value="role对象", description="角色管理")
 public class Role {
-    
+
 	/**角色id*/
 	@TableId(type = IdType.UUID)
     @ApiModelProperty(value = "角色id")
@@ -35,7 +35,7 @@ public class Role {
 	/**角色名称*/
 	@Excel(name = "角色名称", width = 15)
     @ApiModelProperty(value = "角色名称")
-	private java.lang.String name;
+	private java.lang.String roleName;
 	/**角色值*/
 	@Excel(name = "角色值", width = 15)
     @ApiModelProperty(value = "角色值")

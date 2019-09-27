@@ -3,6 +3,8 @@ package org.jeecg.modules.user_role.service;
 import org.jeecg.modules.user_role.entity.UserRole;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.Map;
+
 /**
  * @Description: 用户角色模块
  * @Author: jeecg-boot
@@ -11,4 +13,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IUserRoleService extends IService<UserRole> {
 
+    /**
+     * 查询所有的用户角色信息
+     * @return
+     */
+    Map<String,String> queryUserRole();
 }

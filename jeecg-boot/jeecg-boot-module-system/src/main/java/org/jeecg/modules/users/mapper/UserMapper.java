@@ -14,4 +14,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface UserMapper extends BaseMapper<User> {
 
+    /**
+     * 通过用户账号查询用户信息
+     * @param username
+     * @return
+     */
+
 }

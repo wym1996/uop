@@ -115,24 +115,15 @@ public class UserController {
 //	public Result<User> edit(@RequestBody User user) {
 	public Result<User> edit(@RequestBody JSONObject jsonObject) {
 		Result<User> result = new Result<User>();
-//		User userEntity = userService.getById(user.getId());
-//		if(userEntity==null) {
-//			result.error500("未找到对应实体");
-//		}else {
-//			boolean ok = userService.updateById(user);
-//			//TODO 返回false说明什么？
-//			if(ok) {
-//				result.success("修改成功!");
-//			}
-//		}
+
 		try {
 			User user = userService.getById(jsonObject.getString("id"));
-			System.out.println(user);
+			//System.out.println(jsonObject);
 			if(user==null) {
 				result.error500("未找到对应实体");
 			}else {
 				User users = JSON.parseObject(jsonObject.toJSONString(), User.class);
-				System.out.println(users);
+				//System.out.println(users);
 				users.setUpdateTime(new Date());
 				//String passwordEncode = PasswordUtil.encrypt(user.getUsername(), user.getPassword(), sysUser.getSalt());
 				//user.setPassword(user.getPassword());

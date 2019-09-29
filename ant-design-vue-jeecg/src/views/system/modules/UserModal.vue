@@ -64,23 +64,23 @@
           </a-input-search>
         </a-form-item>
         <a-form-item label="头像" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <a-upload
-            listType="picture-card"
-            class="avatar-uploader"
-            :showUploadList="false"
-            :action="uploadAction"
-            :data="{'isup':1}"
-            :headers="headers"
-            :beforeUpload="beforeUpload"
-            @change="handleChange"
-          >
-            <img v-if="picUrl" :src="getAvatarView()" alt="头像" style="height:104px;max-width:300px"/>
-            <div v-else>
-              <a-icon :type="uploadLoading ? 'loading' : 'plus'" />
-              <div class="ant-upload-text">上传</div>
-            </div>
-          </a-upload>
-        </a-form-item>
+        <a-upload
+          listType="picture-card"
+          class="avatar-uploader"
+          :showUploadList="false"
+          :action="uploadAction"
+          :data="{'isup':1}"
+          :headers="headers"
+          :beforeUpload="beforeUpload"
+          @change="handleChange"
+        >
+          <img v-if="picUrl" :src="getAvatarView()" alt="头像" style="height:104px;max-width:300px"/>
+          <div v-else>
+            <a-icon :type="uploadLoading ? 'loading' : 'plus'" />
+            <div class="ant-upload-text">上传</div>
+          </div>
+        </a-upload>
+      </a-form-item>
 
         <a-form-item label="生日" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-date-picker

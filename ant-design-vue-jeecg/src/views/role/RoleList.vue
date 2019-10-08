@@ -8,7 +8,7 @@
 
           <a-col :md="6" :sm="8">
             <a-form-item label="角色名称">
-              <a-input placeholder="请输入角色名称" v-model="queryParam.name"></a-input>
+              <a-input placeholder="请输入角色名称" v-model="queryParam.roleName"></a-input>
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="8">
@@ -125,7 +125,7 @@
 		   {
             title: '角色名称',
             align:"center",
-            dataIndex: 'name'
+            dataIndex: 'roleName'
            },
 		   {
             title: '角色值',

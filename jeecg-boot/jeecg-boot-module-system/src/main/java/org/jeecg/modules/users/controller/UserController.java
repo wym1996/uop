@@ -96,6 +96,7 @@ public class UserController {
 		String selectedRoles = jsonObject.getString("selectedroles");
 		try {
 			User user = JSON.parseObject(jsonObject.toJSONString(), User.class);
+	//		System.out.println(user);
 			user.setCreateTime(new Date());//设置创建时间
 			//userService.save(user);
 			userService.addUserWithRole(user, selectedRoles);

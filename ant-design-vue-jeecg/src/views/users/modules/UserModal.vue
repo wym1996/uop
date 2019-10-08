@@ -4,13 +4,13 @@
     :width="800"
     :visible="visible"
     :confirmLoading="confirmLoading"
-    @ok="handleOk"
+    @ok="handleSubmit"
     @cancel="handleCancel"
     cancelText="关闭">
-    
+
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
-      
+
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
@@ -47,14 +47,34 @@
           label="所属机构">
           <a-input placeholder="请输入所属机构" v-decorator="['affiliation', {}]" />
         </a-form-item>
-		
+        <a-form-item label="角色分配" :labelCol="labelCol" :wrapperCol="wrapperCol" v-show="!roleDisabled" >
+          <a-select
+            mode="multiple"
+            style="width: 100%"
+            placeholder="请选择用户角色"
+            optionFilterProp = "children"
+            v-model="selectedRole">
+            <a-select-option v-for="(role,roleindex) in roleList" :key="roleindex.toString()" :value="role.id">
+              {{ role.roleName }}
+            </a-select-option>
+          </a-select>
+        </a-form-item>
+
       </a-form>
     </a-spin>
+    <!--<div class="drawer-bootom-button" v-show="!disableSubmit">-->
+      <!--<a-popconfirm title="确定放弃编辑？" @confirm="handleCancel" okText="确定" cancelText="取消">-->
+        <!--<a-button style="margin-right: .8rem">取消</a-button>-->
+      <!--</a-popconfirm>-->
+      <!--<a-button @click="handleSubmit" type="primary" :loading="confirmLoading">提交</a-button>-->
+    <!--</div>-->
   </a-modal>
 </template>
 
 <script>
-  import { httpAction } from '@/api/manage'
+ // import { httpAction } from '@/api/manage'
+  import { getAction } from '@/api/manage'
+  import {addUser,editUser,queryUserRole,queryall } from '@/api/api'
   import pick from 'lodash.pick'
   import moment from "moment"
 
@@ -65,6 +85,8 @@
         title:"操作",
         visible: false,
         model: {},
+        roleList:[],
+        selectedRole:[],
         labelCol: {
           xs: { span: 24 },
           sm: { span: 5 },
@@ -85,13 +107,44 @@
       }
     },
     created () {
+      // const token = Vue.ls.get(ACCESS_TOKEN);
+      // this.headers = {"X-Access-Token":token}
     },
+
     methods: {
+      initialRoleList(){
+        queryall().then((res)=>{
+          if(res.success){
+            this.roleList = res.result;
+          }else{
+            console.log(res.message);
+          }
+        });
+      },
+      loadUserRoles(userid){
+        queryUserRole({userid:userid}).then((res)=>{
+          if(res.success){
+            this.selectedRole = res.result;
+          }else{
+            console.log(res.message);
+          }
+        });
+      },
       add () {
         this.edit({});
       },
       edit (record) {
         this.form.resetFields();
+
+
+        let that = this;
+        that.initialRoleList();
+        if(record.hasOwnProperty("id")){
+          that.loadUserRoles(record.id);
+        }
+        that.userId = record.id;
+
+
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
@@ -103,8 +156,13 @@
       close () {
         this.$emit('close');
         this.visible = false;
+
+        this.disableSubmit = false;
+        this.selectedRole = [];
+
       },
-      handleOk () {
+      moment,
+      handleSubmit () {
         const that = this;
         // 触发表单验证
         this.form.validateFields((err, values) => {
@@ -120,10 +178,18 @@
                method = 'put';
             }
             let formData = Object.assign(this.model, values);
+            formData.selectedroles = this.selectedRole.length>0?this.selectedRole.join(","):'';
+
             //时间格式化
-            
-            console.log(formData)
-            httpAction(httpurl,formData,method).then((res)=>{
+
+            let obj;
+            if(!this.model.id){
+              formData.id = this.userId;
+              obj=addUser(formData);
+            }else{
+              obj=editUser(formData);
+            }
+            obj.then((res)=>{
               if(res.success){
                 that.$message.success(res.message);
                 that.$emit('ok');
@@ -134,6 +200,20 @@
               that.confirmLoading = false;
               that.close();
             })
+
+
+            // console.log(formData)
+            // httpAction(httpurl,formData,method).then((res)=>{
+            //   if(res.success){
+            //     that.$message.success(res.message);
+            //     that.$emit('ok');
+            //   }else{
+            //     that.$message.warning(res.message);
+            //   }
+            // }).finally(() => {
+            //   that.confirmLoading = false;
+            //   that.close();
+            // })
 
 
 

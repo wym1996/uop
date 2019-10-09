@@ -14,6 +14,7 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.modules.role.entity.Role;
 import org.jeecg.modules.system.entity.SysUser;
 import org.jeecg.modules.system.entity.SysUserRole;
 import org.jeecg.modules.user_role.entity.UserRole;
@@ -200,7 +201,21 @@ public class UserController {
 		return result;
 	}
 
-	 @RequestMapping(value = "/queryUserRole", method = RequestMethod.GET)
+     @RequestMapping(value = "/queryallUsers", method = RequestMethod.GET)
+     public Result<List<User>> queryallUsers() {
+         Result<List<User>> result = new Result<>();
+         List<User> list = userService.list();
+         if(list==null||list.size()<=0) {
+             result.error500("未找到用户信息");
+         }else {
+             result.setResult(list);
+             result.setSuccess(true);
+         }
+         return result;
+     }
+
+
+     @RequestMapping(value = "/queryUserRole", method = RequestMethod.GET)
 	 public Result<List<String>> queryUserRole(@RequestParam(name = "userid", required = true) String userid) {
 		 Result<List<String>> result = new Result<>();
 		 List<String> list = new ArrayList<String>();

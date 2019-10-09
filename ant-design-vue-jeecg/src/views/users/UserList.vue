@@ -137,10 +137,10 @@
           //   }
           //  },
 		   // {
-       //      title: '父级id',
+       //      title: '父级用户',
        //      align:"center",
        //      dataIndex: 'fid'
-       //     },
+       // },
 		   {
             title: '用户名',
             align:"center",

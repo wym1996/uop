@@ -11,12 +11,25 @@
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
 
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="父级id">
-          <a-input placeholder="请输入父级id" v-decorator="['fid', {}]" />
+        <a-form-item label="父级用户" :labelCol="labelCol" :wrapperCol="wrapperCol" >
+          <a-select
+            mode="multiple"
+            style="width: 100%"
+            placeholder="请选择父级用户"
+            optionFilterProp = "children"
+            v-decorator="['fid', {}]"
+            v-model="fid">
+            <a-select-option v-for="(user,userindex) in userList" :key="userindex.toString()" :value="user.id">
+              {{ user.username }}
+            </a-select-option>
+          </a-select>
         </a-form-item>
+        <!--<a-form-item-->
+          <!--:labelCol="labelCol"-->
+          <!--:wrapperCol="wrapperCol"-->
+          <!--label="父级id">-->
+          <!--<a-input placeholder="请输入父级id" v-decorator="['fid', {}]" />-->
+        <!--</a-form-item>-->
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
@@ -59,22 +72,17 @@
             </a-select-option>
           </a-select>
         </a-form-item>
-
       </a-form>
     </a-spin>
-    <!--<div class="drawer-bootom-button" v-show="!disableSubmit">-->
-      <!--<a-popconfirm title="确定放弃编辑？" @confirm="handleCancel" okText="确定" cancelText="取消">-->
-        <!--<a-button style="margin-right: .8rem">取消</a-button>-->
-      <!--</a-popconfirm>-->
-      <!--<a-button @click="handleSubmit" type="primary" :loading="confirmLoading">提交</a-button>-->
-    <!--</div>-->
+
+
   </a-modal>
 </template>
 
 <script>
  // import { httpAction } from '@/api/manage'
   import { getAction } from '@/api/manage'
-  import {addUser,editUser,queryUserRole,queryall } from '@/api/api'
+  import {addUser,editUser,queryUserRole,queryall,queryallUsers } from '@/api/api'
   import pick from 'lodash.pick'
   import moment from "moment"
 
@@ -85,8 +93,10 @@
         title:"操作",
         visible: false,
         model: {},
-        roleList:[],
+        roleList:[],    //下拉列表的值
+        userList:[],    //下拉列表的值
         selectedRole:[],
+        fid:[],
         labelCol: {
           xs: { span: 24 },
           sm: { span: 5 },
@@ -117,7 +127,16 @@
           if(res.success){
             this.roleList = res.result;
           }else{
-            console.log(res.message);
+           // console.log(res.message);
+          }
+        });
+      },
+      initialUserList(){
+        queryallUsers().then((res)=>{
+          if(res.success){
+            this.userList = res.result;
+          }else{
+           // console.log(res.message);
           }
         });
       },
@@ -139,6 +158,7 @@
 
         let that = this;
         that.initialRoleList();
+        that.initialUserList();
         if(record.hasOwnProperty("id")){
           that.loadUserRoles(record.id);
         }
@@ -159,6 +179,7 @@
 
         this.disableSubmit = false;
         this.selectedRole = [];
+        this.fid = [];
 
       },
       moment,
@@ -178,7 +199,9 @@
                method = 'put';
             }
             let formData = Object.assign(this.model, values);
+            console.log(formData);
             formData.selectedroles = this.selectedRole.length>0?this.selectedRole.join(","):'';
+            formData.fid = this.fid.length>0?this.fid.join(","):'';
 
             //时间格式化
 
@@ -200,21 +223,6 @@
               that.confirmLoading = false;
               that.close();
             })
-
-
-            // console.log(formData)
-            // httpAction(httpurl,formData,method).then((res)=>{
-            //   if(res.success){
-            //     that.$message.success(res.message);
-            //     that.$emit('ok');
-            //   }else{
-            //     that.$message.warning(res.message);
-            //   }
-            // }).finally(() => {
-            //   that.confirmLoading = false;
-            //   that.close();
-            // })
-
 
 
           }

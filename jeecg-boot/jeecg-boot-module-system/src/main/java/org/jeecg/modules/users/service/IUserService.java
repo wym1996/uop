@@ -20,6 +20,20 @@ public interface IUserService extends IService<User> {
     public User getUserByName(String username);
 
     /**
+     * 添加用户和用户角色关系
+     * @param user
+     * @param roles
+     */
+    public void addUserWithRole(User user, String roles);
+
+    /**
+     * 修改用户和用户角色关系
+     * @param user
+     * @param roles
+     */
+    public void editUserWithRole(User user, String roles);
+
+    /**
      * 校验用户是否有效
      * @param
      * @return

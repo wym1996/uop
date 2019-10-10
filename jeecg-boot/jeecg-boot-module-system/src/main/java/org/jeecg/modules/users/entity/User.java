@@ -26,11 +26,10 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @ApiModel(value="user对象", description="用户模块")
-public class User {
-	/**
-	 * md5密码盐
-	 */
-	private String salt;
+public class User implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 
 	/**id*/
 	@TableId(type = IdType.UUID)

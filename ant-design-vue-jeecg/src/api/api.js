@@ -12,13 +12,18 @@ const editRole = (params)=>putAction("/sys/role/edit",params);
 // const deleteRole = (params)=>deleteAction("/sys/role/delete",params);
 // const deleteRoleList = (params)=>deleteAction("/sys/role/deleteBatch",params);
 const checkRoleCode = (params)=>getAction("/sys/role/checkRoleCode",params);
-const queryall = (params)=>getAction("/sys/role/queryall",params);
+//const queryall = (params)=>getAction("/sys/role/queryall",params);
+const queryall = (params)=>getAction("/role/role/queryall",params);
 
 //用户管理
-const addUser = (params)=>postAction("/sys/user/add",params);
-const editUser = (params)=>putAction("/sys/user/edit",params);
-const queryUserRole = (params)=>getAction("/sys/user/queryUserRole",params);
-const getUserList = (params)=>getAction("/sys/user/list",params);
+//const addUser = (params)=>postAction("/sys/user/add",params);
+const addUser = (params)=>postAction("/users/user/add",params);
+//const editUser = (params)=>putAction("/sys/user/edit",params);
+const editUser = (params)=>putAction("/users/user/edit",params);
+//const queryUserRole = (params)=>getAction("/sys/user/queryUserRole",params);
+const queryUserRole = (params)=>getAction("/users/user/queryUserRole",params);
+//const getUserList = (params)=>getAction("/users/user/list",params);
+const queryallUsers = (params)=>getAction("/users/user/queryallUsers",params);
 // const deleteUser = (params)=>deleteAction("/sys/user/delete",params);
 // const deleteUserList = (params)=>deleteAction("/sys/user/deleteBatch",params);
 const frozenBatch = (params)=>putAction("/sys/user/frozenBatch",params);
@@ -97,7 +102,8 @@ export {
   addUser,
   editUser,
   queryUserRole,
-  getUserList,
+ // getUserList,
+  queryallUsers,
   queryall,
   frozenBatch,
   checkOnlyUser,

@@ -207,7 +207,7 @@ export const JeecgListMixin = {
     handleDetail:function(record){
       this.$refs.modalForm.edit(record);
       this.$refs.modalForm.title="详情";
-      this.$refs.modalForm.disableSubmit = true;
+      this.$refs.modalForm.disableSubmit = false;
     },
     /* 导出 */
     handleExportXls2(){

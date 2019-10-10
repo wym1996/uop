@@ -1,4 +1,4 @@
-package org.jeecg.modules.role.controller;
+package org.jeecg.modules.user_role.controller;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,15 +12,14 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
-import org.jeecg.modules.role.entity.Role;
-import org.jeecg.modules.role.service.IRoleService;
+import org.jeecg.modules.user_role.entity.UserRole;
+import org.jeecg.modules.user_role.service.IUserRoleService;
 import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
-import org.jeecg.modules.system.entity.SysRole;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -37,55 +36,55 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
  /**
- * @Description: 角色管理
+ * @Description: 用户角色模块
  * @Author: jeecg-boot
  * @Date:   2019-09-25
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags="角色管理")
+@Api(tags="用户角色模块")
 @RestController
-@RequestMapping("/role/role")
-public class RoleController {
+@RequestMapping("/user_role/userRole")
+public class UserRoleController {
 	@Autowired
-	private IRoleService roleService;
-
+	private IUserRoleService userRoleService;
+	
 	/**
 	  * 分页列表查询
-	 * @param role
+	 * @param userRole
 	 * @param pageNo
 	 * @param pageSize
 	 * @param req
 	 * @return
 	 */
-	@AutoLog(value = "角色管理-分页列表查询")
-	@ApiOperation(value="角色管理-分页列表查询", notes="角色管理-分页列表查询")
+	@AutoLog(value = "用户角色模块-分页列表查询")
+	@ApiOperation(value="用户角色模块-分页列表查询", notes="用户角色模块-分页列表查询")
 	@GetMapping(value = "/list")
-	public Result<IPage<Role>> queryPageList(Role role,
+	public Result<IPage<UserRole>> queryPageList(UserRole userRole,
 									  @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 									  @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 									  HttpServletRequest req) {
-		Result<IPage<Role>> result = new Result<IPage<Role>>();
-		QueryWrapper<Role> queryWrapper = QueryGenerator.initQueryWrapper(role, req.getParameterMap());
-		Page<Role> page = new Page<Role>(pageNo, pageSize);
-		IPage<Role> pageList = roleService.page(page, queryWrapper);
+		Result<IPage<UserRole>> result = new Result<IPage<UserRole>>();
+		QueryWrapper<UserRole> queryWrapper = QueryGenerator.initQueryWrapper(userRole, req.getParameterMap());
+		Page<UserRole> page = new Page<UserRole>(pageNo, pageSize);
+		IPage<UserRole> pageList = userRoleService.page(page, queryWrapper);
 		result.setSuccess(true);
 		result.setResult(pageList);
 		return result;
 	}
-
+	
 	/**
 	  *   添加
-	 * @param role
+	 * @param userRole
 	 * @return
 	 */
-	@AutoLog(value = "角色管理-添加")
-	@ApiOperation(value="角色管理-添加", notes="角色管理-添加")
+	@AutoLog(value = "用户角色模块-添加")
+	@ApiOperation(value="用户角色模块-添加", notes="用户角色模块-添加")
 	@PostMapping(value = "/add")
-	public Result<Role> add(@RequestBody Role role) {
-		Result<Role> result = new Result<Role>();
+	public Result<UserRole> add(@RequestBody UserRole userRole) {
+		Result<UserRole> result = new Result<UserRole>();
 		try {
-			roleService.save(role);
+			userRoleService.save(userRole);
 			result.success("添加成功！");
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
@@ -93,100 +92,87 @@ public class RoleController {
 		}
 		return result;
 	}
-
+	
 	/**
 	  *  编辑
-	 * @param role
+	 * @param userRole
 	 * @return
 	 */
-	@AutoLog(value = "角色管理-编辑")
-	@ApiOperation(value="角色管理-编辑", notes="角色管理-编辑")
+	@AutoLog(value = "用户角色模块-编辑")
+	@ApiOperation(value="用户角色模块-编辑", notes="用户角色模块-编辑")
 	@PutMapping(value = "/edit")
-	public Result<Role> edit(@RequestBody Role role) {
-		Result<Role> result = new Result<Role>();
-		Role roleEntity = roleService.getById(role.getId());
-		if(roleEntity==null) {
+	public Result<UserRole> edit(@RequestBody UserRole userRole) {
+		Result<UserRole> result = new Result<UserRole>();
+		UserRole userRoleEntity = userRoleService.getById(userRole.getId());
+		if(userRoleEntity==null) {
 			result.error500("未找到对应实体");
 		}else {
-			boolean ok = roleService.updateById(role);
+			boolean ok = userRoleService.updateById(userRole);
 			//TODO 返回false说明什么？
 			if(ok) {
 				result.success("修改成功!");
 			}
 		}
-
+		
 		return result;
 	}
-
+	
 	/**
 	  *   通过id删除
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "角色管理-通过id删除")
-	@ApiOperation(value="角色管理-通过id删除", notes="角色管理-通过id删除")
+	@AutoLog(value = "用户角色模块-通过id删除")
+	@ApiOperation(value="用户角色模块-通过id删除", notes="用户角色模块-通过id删除")
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
 		try {
-			roleService.removeById(id);
+			userRoleService.removeById(id);
 		} catch (Exception e) {
 			log.error("删除失败",e.getMessage());
 			return Result.error("删除失败!");
 		}
 		return Result.ok("删除成功!");
 	}
-
+	
 	/**
 	  *  批量删除
 	 * @param ids
 	 * @return
 	 */
-	@AutoLog(value = "角色管理-批量删除")
-	@ApiOperation(value="角色管理-批量删除", notes="角色管理-批量删除")
+	@AutoLog(value = "用户角色模块-批量删除")
+	@ApiOperation(value="用户角色模块-批量删除", notes="用户角色模块-批量删除")
 	@DeleteMapping(value = "/deleteBatch")
-	public Result<Role> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
-		Result<Role> result = new Result<Role>();
+	public Result<UserRole> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
+		Result<UserRole> result = new Result<UserRole>();
 		if(ids==null || "".equals(ids.trim())) {
 			result.error500("参数不识别！");
 		}else {
-			this.roleService.removeByIds(Arrays.asList(ids.split(",")));
+			this.userRoleService.removeByIds(Arrays.asList(ids.split(",")));
 			result.success("删除成功!");
 		}
 		return result;
 	}
-
+	
 	/**
 	  * 通过id查询
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "角色管理-通过id查询")
-	@ApiOperation(value="角色管理-通过id查询", notes="角色管理-通过id查询")
+	@AutoLog(value = "用户角色模块-通过id查询")
+	@ApiOperation(value="用户角色模块-通过id查询", notes="用户角色模块-通过id查询")
 	@GetMapping(value = "/queryById")
-	public Result<Role> queryById(@RequestParam(name="id",required=true) String id) {
-		Result<Role> result = new Result<Role>();
-		Role role = roleService.getById(id);
-		if(role==null) {
+	public Result<UserRole> queryById(@RequestParam(name="id",required=true) String id) {
+		Result<UserRole> result = new Result<UserRole>();
+		UserRole userRole = userRoleService.getById(id);
+		if(userRole==null) {
 			result.error500("未找到对应实体");
 		}else {
-			result.setResult(role);
+			result.setResult(userRole);
 			result.setSuccess(true);
 		}
 		return result;
 	}
-
-	 @RequestMapping(value = "/queryall", method = RequestMethod.GET)
-	 public Result<List<Role>> queryall() {
-		 Result<List<Role>> result = new Result<>();
-		 List<Role> list = roleService.list();
-		 if(list==null||list.size()<=0) {
-			 result.error500("未找到角色信息");
-		 }else {
-			 result.setResult(list);
-			 result.setSuccess(true);
-		 }
-		 return result;
-	 }
 
   /**
       * 导出excel
@@ -197,13 +183,13 @@ public class RoleController {
   @RequestMapping(value = "/exportXls")
   public ModelAndView exportXls(HttpServletRequest request, HttpServletResponse response) {
       // Step.1 组装查询条件
-      QueryWrapper<Role> queryWrapper = null;
+      QueryWrapper<UserRole> queryWrapper = null;
       try {
           String paramsStr = request.getParameter("paramsStr");
           if (oConvertUtils.isNotEmpty(paramsStr)) {
               String deString = URLDecoder.decode(paramsStr, "UTF-8");
-              Role role = JSON.parseObject(deString, Role.class);
-              queryWrapper = QueryGenerator.initQueryWrapper(role, request.getParameterMap());
+              UserRole userRole = JSON.parseObject(deString, UserRole.class);
+              queryWrapper = QueryGenerator.initQueryWrapper(userRole, request.getParameterMap());
           }
       } catch (UnsupportedEncodingException e) {
           e.printStackTrace();
@@ -211,11 +197,11 @@ public class RoleController {
 
       //Step.2 AutoPoi 导出Excel
       ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
-      List<Role> pageList = roleService.list(queryWrapper);
+      List<UserRole> pageList = userRoleService.list(queryWrapper);
       //导出文件名称
-      mv.addObject(NormalExcelConstants.FILE_NAME, "角色管理列表");
-      mv.addObject(NormalExcelConstants.CLASS, Role.class);
-      mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("角色管理列表数据", "导出人:Jeecg", "导出信息"));
+      mv.addObject(NormalExcelConstants.FILE_NAME, "用户角色模块列表");
+      mv.addObject(NormalExcelConstants.CLASS, UserRole.class);
+      mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("用户角色模块列表数据", "导出人:Jeecg", "导出信息"));
       mv.addObject(NormalExcelConstants.DATA_LIST, pageList);
       return mv;
   }
@@ -238,9 +224,9 @@ public class RoleController {
           params.setHeadRows(1);
           params.setNeedSave(true);
           try {
-              List<Role> listRoles = ExcelImportUtil.importExcel(file.getInputStream(), Role.class, params);
-              roleService.saveBatch(listRoles);
-              return Result.ok("文件导入成功！数据行数:" + listRoles.size());
+              List<UserRole> listUserRoles = ExcelImportUtil.importExcel(file.getInputStream(), UserRole.class, params);
+              userRoleService.saveBatch(listUserRoles);
+              return Result.ok("文件导入成功！数据行数:" + listUserRoles.size());
           } catch (Exception e) {
               log.error(e.getMessage(),e);
               return Result.error("文件导入失败:"+e.getMessage());

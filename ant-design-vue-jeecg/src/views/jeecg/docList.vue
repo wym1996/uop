@@ -6,33 +6,32 @@
       <a-form layout="inline">
         <a-row :gutter="24">
 
-          <!--<a-col :md="6" :sm="8">-->
-            <!--<a-form-item label="父级id">-->
-              <!--<a-input placeholder="请输入父级id" v-model="queryParam.fid"></a-input>-->
-            <!--</a-form-item>-->
-          <!--</a-col>-->
           <a-col :md="6" :sm="8">
-            <a-form-item label="用户名">
-              <a-input placeholder="请输入用户名" v-model="queryParam.username"></a-input>
+            <a-form-item label="名称">
+              <a-input placeholder="请输入名称" v-model="queryParam.docName"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :md="6" :sm="8">
+            <a-form-item label="标准书号">
+              <a-input placeholder="请输入标准书号" v-model="queryParam.isbn"></a-input>
             </a-form-item>
           </a-col>
         <template v-if="toggleSearchStatus">
-        <!--<a-col :md="6" :sm="8">-->
-            <!--<a-form-item label="密码">-->
-              <!--<a-input placeholder="请输入密码" v-model="queryParam.password"></a-input>-->
-            <!--</a-form-item>-->
-          <!--</a-col>-->
-          <a-col :md="6" :sm="8">
-            <a-form-item label="身份证号">
-              <a-input placeholder="请输入身份证号" v-model="queryParam.idcard"></a-input>
+        <a-col :md="6" :sm="8">
+            <a-form-item label="类型">
+              <a-input placeholder="请输入类型" v-model="queryParam.type"></a-input>
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="8">
-            <a-form-item label="所属部门">
-              <a-input placeholder="请输入所属部门" v-model="queryParam.deptname"></a-input>
+            <a-form-item label="版本">
+              <a-input placeholder="请输入版本" v-model="queryParam.version"></a-input>
             </a-form-item>
           </a-col>
-
+          <a-col :md="6" :sm="8">
+            <a-form-item label="引用">
+              <a-input placeholder="请输入引用" v-model="queryParam.reference"></a-input>
+            </a-form-item>
+          </a-col>
           </template>
           <a-col :md="6" :sm="8" >
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
@@ -51,8 +50,8 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">添加用户</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('用户模块')">导出</a-button>
+      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('FACE信息库管理')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -91,9 +90,6 @@
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
             <a-menu slot="overlay">
               <a-menu-item>
-                 <a-menu-item>
-                <a href="javascript:;" @click="handleDetail(record)">授权</a>
-              </a-menu-item>
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
                   <a>删除</a>
                 </a-popconfirm>
@@ -107,64 +103,74 @@
     <!-- table区域-end -->
 
     <!-- 表单区域 -->
-    <user-modal ref="modalForm" @ok="modalFormOk"></user-modal>
+    <doc-modal ref="modalForm" @ok="modalFormOk"></doc-modal>
   </a-card>
 </template>
 
 <script>
-  import UserModal from './modules/UserModal'
+  import docModal from './modules/docModal'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 
   export default {
-    name: "UserList",
+    name: "docList",
     mixins:[JeecgListMixin],
     components: {
-      UserModal
+      docModal
     },
     data () {
       return {
-        description: '用户模块管理页面',
+        description: 'FACE信息库管理管理页面',
         // 表头
         columns: [
-          // {
-          //   title: 'id',
-          //   dataIndex: '',
-          //   key:'rowIndex',
-          //   width:60,
-          //   align:"center",
-          //   customRender:function (t,r,index) {
-          //     return parseInt(index)+1;
-          //   }
-          //  },
-		   // {
-       //      title: '父级用户',
-       //      align:"center",
-       //      dataIndex: 'fid'
-       // },
-		   {
-            title: '用户名',
+          {
+            title: '序号',
+            dataIndex: '',
+            key:'rowIndex',
+            width:60,
             align:"center",
-            dataIndex: 'username'
+            customRender:function (t,r,index) {
+              return parseInt(index)+1;
+            }
            },
 		   {
-            title: '密码',
+            title: '名称',
             align:"center",
-            dataIndex: 'password'
+            dataIndex: 'docName'
            },
 		   {
-            title: '身份证号',
+            title: '标准书号',
             align:"center",
-            dataIndex: 'idcard'
+            dataIndex: 'isbn'
            },
 		   {
-            title: '所属部门',
+            title: '类型',
             align:"center",
-            dataIndex: 'deptname'
+            dataIndex: 'type'
            },
 		   {
-            title: '所属机构',
+            title: '版本',
             align:"center",
-            dataIndex: 'affiliation'
+            dataIndex: 'version'
+           },
+		   {
+            title: '引用',
+            align:"center",
+            dataIndex: 'reference'
+           },
+		   {
+            title: '描述',
+            align:"center",
+            dataIndex: 'description'
+           },
+		   {
+            title: '发布时间',
+            align:"center",
+            dataIndex: 'createTime'
+           },
+		   {
+            title: '更新时间',
+            align:"center",
+            dataIndex: 'updateTime'
            },
           {
             title: '操作',
@@ -174,11 +180,11 @@
           }
         ],
 		url: {
-          list: "/users/user/list",
-          delete: "/users/user/delete",
-          deleteBatch: "/users/user/deleteBatch",
-          exportXlsUrl: "users/user/exportXls",
-          importExcelUrl: "users/user/importExcel",
+          list: "/doc/doc/list",
+          delete: "/doc/doc/delete",
+          deleteBatch: "/doc/doc/deleteBatch",
+          exportXlsUrl: "doc/doc/exportXls",
+          importExcelUrl: "doc/doc/importExcel",
        },
     }
   },
@@ -188,7 +194,7 @@
     }
   },
     methods: {
-
+     
     }
   }
 </script>

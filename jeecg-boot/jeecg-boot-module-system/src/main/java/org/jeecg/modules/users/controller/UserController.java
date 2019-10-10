@@ -1,20 +1,26 @@
 package org.jeecg.modules.users.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.alibaba.fastjson.JSONObject;
+import com.sun.xml.internal.bind.v2.TODO;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.modules.role.entity.Role;
+import org.jeecg.modules.system.entity.SysUser;
+import org.jeecg.modules.system.entity.SysUserRole;
+import org.jeecg.modules.user_role.entity.UserRole;
+import org.jeecg.modules.user_role.service.IUserRoleService;
 import org.jeecg.modules.users.entity.User;
 import org.jeecg.modules.users.service.IUserService;
-import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -48,6 +54,9 @@ import io.swagger.annotations.ApiOperation;
 public class UserController {
 	@Autowired
 	private IUserService userService;
+	 @Autowired
+	 private IUserRoleService userRoleService;
+
 
 	/**
 	  * 分页列表查询
@@ -81,10 +90,17 @@ public class UserController {
 	@AutoLog(value = "用户模块-添加")
 	@ApiOperation(value="用户模块-添加", notes="用户模块-添加")
 	@PostMapping(value = "/add")
-	public Result<User> add(@RequestBody User user) {
+	//@RequiresPermissions("user:add")
+	public Result<User> add(@RequestBody JSONObject jsonObject) {
+	//public Result<User> add(@RequestBody User user) {
 		Result<User> result = new Result<User>();
+		String selectedRoles = jsonObject.getString("selectedroles");
 		try {
-			userService.save(user);
+			User user = JSON.parseObject(jsonObject.toJSONString(), User.class);
+	//		System.out.println(user);
+			user.setCreateTime(new Date());//设置创建时间
+			//userService.save(user);
+			userService.addUserWithRole(user, selectedRoles);
 			result.success("添加成功！");
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
@@ -101,19 +117,30 @@ public class UserController {
 	@AutoLog(value = "用户模块-编辑")
 	@ApiOperation(value="用户模块-编辑", notes="用户模块-编辑")
 	@PutMapping(value = "/edit")
-	public Result<User> edit(@RequestBody User user) {
+//	public Result<User> edit(@RequestBody User user) {
+	public Result<User> edit(@RequestBody JSONObject jsonObject) {
 		Result<User> result = new Result<User>();
-		User userEntity = userService.getById(user.getId());
-		if(userEntity==null) {
-			result.error500("未找到对应实体");
-		}else {
-			boolean ok = userService.updateById(user);
-			//TODO 返回false说明什么？
-			if(ok) {
+
+		try {
+			User user = userService.getById(jsonObject.getString("id"));
+			//System.out.println(jsonObject);
+			if(user==null) {
+				result.error500("未找到对应实体");
+			}else {
+				User users = JSON.parseObject(jsonObject.toJSONString(), User.class);
+				//System.out.println(users);
+				users.setUpdateTime(new Date());
+				//String passwordEncode = PasswordUtil.encrypt(user.getUsername(), user.getPassword(), sysUser.getSalt());
+				//user.setPassword(user.getPassword());
+				String roles = jsonObject.getString("selectedroles");
+				System.out.println(roles);
+				userService.editUserWithRole(users, roles);
 				result.success("修改成功!");
 			}
+		} catch (Exception e) {
+			//	log.error(e.getMessage(), e);
+			result.error500("操作失败");
 		}
-
 		return result;
 	}
 
@@ -174,6 +201,36 @@ public class UserController {
 		return result;
 	}
 
+     @RequestMapping(value = "/queryallUsers", method = RequestMethod.GET)
+     public Result<List<User>> queryallUsers() {
+         Result<List<User>> result = new Result<>();
+         List<User> list = userService.list();
+         if(list==null||list.size()<=0) {
+             result.error500("未找到用户信息");
+         }else {
+             result.setResult(list);
+             result.setSuccess(true);
+         }
+         return result;
+     }
+
+
+     @RequestMapping(value = "/queryUserRole", method = RequestMethod.GET)
+	 public Result<List<String>> queryUserRole(@RequestParam(name = "userid", required = true) String userid) {
+		 Result<List<String>> result = new Result<>();
+		 List<String> list = new ArrayList<String>();
+		 List<UserRole> userRole = userRoleService.list(new QueryWrapper<UserRole>().lambda().eq(UserRole::getUserId, userid));
+		 if (userRole == null || userRole.size() <= 0) {
+			 result.error500("未找到用户相关角色信息");
+		 } else {
+			 for (UserRole userRoles : userRole) {
+				 list.add(userRoles.getRoleId());
+			 }
+			 result.setSuccess(true);
+			 result.setResult(list);
+		 }
+		 return result;
+	 }
   /**
       * 导出excel
    *

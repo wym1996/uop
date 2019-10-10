@@ -23,6 +23,12 @@ public interface UserMapper extends BaseMapper<User> {
     public User getUserByName(@Param("username") String username);
 
     /**
+     * 通过用户账号查询用户信息
+     * @param username
+     * @return
+     */
+
+    /**
      * @Author wym
      * 通过用户名在数据库中查找用户密码
      * @param username

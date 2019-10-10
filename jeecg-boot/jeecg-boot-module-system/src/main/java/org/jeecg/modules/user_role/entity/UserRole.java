@@ -26,7 +26,10 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @ApiModel(value="user_role对象", description="用户角色模块")
-public class UserRole {
+public class UserRole implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 
 	/**用户角色id*/
 	@TableId(type = IdType.UUID)

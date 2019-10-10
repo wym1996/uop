@@ -33,6 +33,7 @@ import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -97,7 +98,9 @@ public class UserController {
 		String selectedRoles = jsonObject.getString("selectedroles");
 		try {
 			User user = JSON.parseObject(jsonObject.toJSONString(), User.class);
-	//		System.out.println(user);
+			if(user.getIdcard()!=null)
+				return result.error500("该用户已存在！");
+			//System.out.println(user);
 			user.setCreateTime(new Date());//设置创建时间
 			//userService.save(user);
 			userService.addUserWithRole(user, selectedRoles);

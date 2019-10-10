@@ -24,6 +24,13 @@ import javax.annotation.Resource;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
     @Resource
     private UserRoleMapper userRoleMapper;
+    @Resource
+    private UserMapper userMapper;
+
+    @Override
+    public User getUserByName(String username) {
+        return userMapper.getUserByName(username);
+    }
 
     @Override
     public void addUserWithRole(User user, String roles) {

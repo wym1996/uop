@@ -98,7 +98,8 @@ public class UserController {
 		String selectedRoles = jsonObject.getString("selectedroles");
 		try {
 			User user = JSON.parseObject(jsonObject.toJSONString(), User.class);
-			if(user.getIdcard()!=null)
+			User user1 = userService.getUserByName(user.getUsername());
+			if(user1!=null)
 				return result.error500("该用户已存在！");
 			//System.out.println(user);
 			user.setCreateTime(new Date());//设置创建时间
@@ -195,6 +196,25 @@ public class UserController {
 	public Result<User> queryById(@RequestParam(name="id",required=true) String id) {
 		Result<User> result = new Result<User>();
 		User user = userService.getById(id);
+		if(user==null) {
+			result.error500("未找到对应实体");
+		}else {
+			result.setResult(user);
+			result.setSuccess(true);
+		}
+		return result;
+	}
+	/**
+	  * 通过用户名查询
+	 * @param username
+	 * @return
+	 */
+	@AutoLog(value = "用户模块-通过用户名查询")
+	@ApiOperation(value="用户模块-通过用户名查询", notes="用户模块-通过用户名查询")
+	@GetMapping(value = "/queryByUserName")
+	public Result<User> queryByUserName(@RequestParam(name="username",required=true) String username) {
+		Result<User> result = new Result<User>();
+		User user = userService.getUserByName(username);
 		if(user==null) {
 			result.error500("未找到对应实体");
 		}else {

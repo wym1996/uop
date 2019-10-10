@@ -47,25 +47,10 @@
           label="描述">
           <a-input placeholder="请输入描述" v-decorator="['description', {}]" />
         </a-form-item>
-        <!--
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="下载路径">
-          <a-input placeholder="请输入下载路径" v-decorator="['downloadpath', {}]" />
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="删除标识0-正常,1-已删除">
-          <a-input placeholder="请输入删除标识0-正常,1-已删除" v-decorator="['delFlag', {}]" />
-        </a-form-item>
-        -->
-        <!--hjc***************************************************************************-->
-        <a-form-item label="上传文件" :labelCol="labelCol" :wrapperCol="wrapperCol">
+        <a-form-item label="上传文件" :labelCol="labelCol" :wrapperCol="wrapperCol" v-has="'user:upload'">
           <a-upload
             name="file"
-            :multiple="true"
+            :multiple="false"
             :action="uploadAction"
             :headers="headers"
             :data="{'isup':1,'bizPath':bizPath}"
@@ -77,7 +62,6 @@
             </a-button>
           </a-upload>
         </a-form-item>
-        <!--hjc****************************************************************************-->
       </a-form>
     </a-spin>
   </a-modal>
@@ -87,7 +71,7 @@
   import { httpAction } from '@/api/manage'
   import pick from 'lodash.pick'
   import moment from "moment"
-  //hjc*******************************************************************************
+
   import Vue from 'vue'
   import { ACCESS_TOKEN } from "@/store/mutation-types"
 
@@ -105,7 +89,6 @@
     }
     return path.substring(path.lastIndexOf("/")+1);
   }
-  //hjc*******************************************************************************
 
   export default {
     name: "docModal",
@@ -131,17 +114,15 @@
           add: "/doc/doc/add",
           edit: "/doc/doc/edit",
         },
-        //hjc*******************************************************************************
+
         uploadAction:window._CONFIG['domianURL']+"/sys/common/upload",
         urlDownload:window._CONFIG['domianURL'] + "/sys/common/download/",
         headers:{},
         fileList: [],
         downloadpath:''
-        //hjc*******************************************************************************
       }
     },
 
-    //hjc*******************************************************************************
     props:{
       text:{
         type:String,
@@ -179,13 +160,13 @@
       const token = Vue.ls.get(ACCESS_TOKEN);
       this.headers = {"X-Access-Token":token}
     },
-    //hjc*******************************************************************************
 
     methods: {
       add () {
         this.edit({});
         this.downloadpath = ''
       },
+
       edit (record) {
         this.form.resetFields();
         this.model = Object.assign({}, record);
@@ -195,31 +176,29 @@
           //时间格式化
         });
       },
-      //hjc*******************************************************************************
-        initFileList(paths){
-          if(!paths || paths.length==0){
-            //return [];
-            // update-begin- --- author:os_chengtgen ------ date:20190729 ---- for:issues:326,Jupload组件初始化bug
-            this.fileList = [];
-            return;
-            // update-end- --- author:os_chengtgen ------ date:20190729 ---- for:issues:326,Jupload组件初始化bug
-          }
-          let fileList = [];
-          let arr = paths.split(",")
-          for(var a=0;a<arr.length;a++){
-            fileList.push({
-              uid:uidGenerator(),
-              name:getFileName(arr[a]),
-              status: 'done',
-              url: this.urlDownload+arr[a],
-              response:{
-                status:"history",
-                message:arr[a]
-              }
-            })
-          }
-          this.fileList = fileList
-        },
+
+      initFileList(paths){
+        if(!paths || paths.length==0){
+          this.fileList = [];
+          return;
+        }
+        let fileList = [];
+        let arr = paths.split(",")
+        for(var a=0;a<arr.length;a++){
+          fileList.push({
+            uid:uidGenerator(),
+            name:getFileName(arr[a]),
+            status: 'done',
+            url: this.urlDownload+arr[a],
+            response:{
+              status:"history",
+              message:arr[a]
+            }
+          })
+        }
+        this.fileList = fileList
+      },
+
         handlePathChange(){
           let uploadFiles = this.fileList
           let path = ''
@@ -236,6 +215,7 @@
           }
           this.$emit('change', path);
         },
+
         beforeUpload(file){
           var fileType = file.type;
           if(fileType===FILE_TYPE_IMG){
@@ -252,9 +232,11 @@
           //TODO 扩展功能验证文件大小
           return true
         },
+
         handleChange(info) {
           console.log("--文件列表改变--")
           let fileList = info.fileList
+          fileList = fileList.slice(-1);
           if(info.file.status==='done'){
             if(info.file.response.success){
               fileList = fileList.map((file) => {
@@ -276,15 +258,18 @@
             this.handlePathChange()
           }
         },
+
         handleDelete(file){
           //如有需要新增 删除逻辑
           console.log(file)
         },
-      //hjc*******************************************************************************
+
       close () {
         this.$emit('close');
         this.visible = false;
+        this.fileList = [];
       },
+
       handleOk () {
         const that = this;
         // 触发表单验证
@@ -301,15 +286,9 @@
                method = 'put';
             }
 
-            //let downloadURL = '1';
-
             let formData = Object.assign(this.model, values);
-
-            //hjc*************************************************************************
             formData.downloadpath = this.downloadpath;
-            //hjc*************************************************************************
             //时间格式化
-            
             console.log(formData)
             httpAction(httpurl,formData,method).then((res)=>{
               if(res.success){
@@ -329,12 +308,11 @@
         this.close()
       },
     },
-    //hjc*************************************************************************
+
     model: {
       prop: 'value',
       event: 'change'
     }
-    //hjc*************************************************************************
   }
 </script>
 

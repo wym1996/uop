@@ -11,7 +11,7 @@
               size="large"
               v-decorator="['username',validatorRules.username,{ validator: this.handleUsernameOrEmail }]"
               type="text"
-              placeholder="请输入帐户名 / jeecg">
+              placeholder="请输入帐户名">
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
@@ -116,13 +116,13 @@
       </div>-->
     </a-form>
 
-    <two-step-captcha
+   <!-- <two-step-captcha
       v-if="requiredTwoStepCaptcha"
       :visible="stepCaptchaVisible"
       @success="stepCaptchaSuccess"
       @cancel="stepCaptchaCancel"></two-step-captcha>
-
-    <a-modal
+-->
+    <!--<a-modal
       title="登录部门选择"
       :width="450"
       :visible="departVisible"
@@ -160,7 +160,7 @@
 
 
     </a-modal>
-
+-->
   </div>
 </template>
 
@@ -204,15 +204,15 @@
         formLogin: {
           username: "",
           password: "",
-          captcha: "",
-          mobile: "",
+          // captcha: "",
+          // mobile: "",
           rememberMe: true
         },
         validatorRules:{
           username:{rules: [{ required: true, message: '请输入用户名!',validator: 'click'}]},
           password:{rules: [{ required: true, message: '请输入密码!',validator: 'click'}]},
-          mobile:{rules: [{validator:this.validateMobile}]},
-          captcha:{rule: [{ required: true, message: '请输入验证码!'}]},
+          // mobile:{rules: [{validator:this.validateMobile}]},
+          // captcha:{rule: [{ required: true, message: '请输入验证码!'}]},
           inputCode:{rules: [{ required: true, message: '请输入验证码!'},{validator: this.validateInputCode}]}
         },
         verifiedCode:"",
@@ -251,6 +251,9 @@
       },
       handleSubmit () {
         let that = this
+          //console.log('that')
+         // console.log(that)
+         // console.log(that.formLogin.rememberMe)
         let loginParams = {
           remember_me: that.formLogin.rememberMe
         };

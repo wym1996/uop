@@ -1,6 +1,6 @@
 import { USER_AUTH,SYS_BUTTON_AUTH } from "@/store/mutation-types"
 
-const hasPermission = {
+const hasPermission = {//自定义指令，加载到main中去
     install (Vue, options) {
         console.log(options);
           Vue.directive('has', {

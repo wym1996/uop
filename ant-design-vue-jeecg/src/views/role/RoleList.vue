@@ -80,6 +80,9 @@
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
             <a-menu slot="overlay">
               <a-menu-item>
+                <a @click="handlePerssion(record.id)">授权</a>
+              </a-menu-item>
+              <a-menu-item>
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
                   <a>删除</a>
                 </a-popconfirm>
@@ -94,34 +97,38 @@
 
     <!-- 表单区域 -->
     <role-modal ref="modalForm" @ok="modalFormOk"></role-modal>
+    <user-role-modal ref="modalUserRole"></user-role-modal>
   </a-card>
 </template>
 
 <script>
   import RoleModal from './modules/RoleModal'
+  import UserRoleModal from '@/views/system/modules/UserRoleModal'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+
 
   export default {
     name: "RoleList",
     mixins:[JeecgListMixin],
     components: {
-      RoleModal
+      RoleModal,
+      UserRoleModal,
     },
     data () {
       return {
         description: '角色管理管理页面',
         // 表头
         columns: [
-          // {
-          //   title: 'id',
-          //   dataIndex: '',
-          //   key:'rowIndex',
-          //   width:60,
-          //   align:"center",
-          //   customRender:function (t,r,index) {
-          //     return parseInt(index)+1;
-          //   }
-          //  },
+          {
+            title: '角色Id',
+            dataIndex: '',
+            key:'rowIndex',
+            width:60,
+            align:"center",
+            customRender:function (t,r,index) {
+              return parseInt(index)+1;
+            }
+           },
 		   {
             title: '角色名称',
             align:"center",
@@ -159,7 +166,13 @@
     }
   },
     methods: {
-
+        handlePerssion: function(roleId){
+            // alert(roleId);
+            this.$refs.modalUserRole.show(roleId);
+        },
+        onChangeDate(date, dateString) {
+            console.log(date, dateString);
+        },
     }
   }
 </script>

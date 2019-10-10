@@ -27,6 +27,10 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 @Accessors(chain = true)
 @ApiModel(value="user对象", description="用户模块")
 public class User {
+	/**
+	 * md5密码盐
+	 */
+	private String salt;
 
 	/**id*/
 	@TableId(type = IdType.UUID)

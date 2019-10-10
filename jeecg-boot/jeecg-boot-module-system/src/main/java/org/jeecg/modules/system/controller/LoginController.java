@@ -78,9 +78,11 @@ public class LoginController {
 
 		//1. 校验用户是否有效
 		SysUser sysUser = sysUserService.getUserByName(username);
+//        System.out.println(sysUser);   返回用户信息
 		result = sysUserService.checkUserIsEffective(sysUser);
+      // System.out.println(result);   //返回Result(success=true, message=操作成功！, code=0, result=null, timestamp=1569551243058)
 		if(!result.isSuccess()) {
-			return result;
+			return result;//登录不成功时返回success=false信息
 		}
 		
 		//2. 校验用户名或密码是否正确
@@ -318,10 +320,10 @@ public class LoginController {
 	 * @return
 	 */
 	private Result<JSONObject> userInfo(SysUser sysUser, Result<JSONObject> result) {
-		String syspassword = sysUser.getPassword();
+		String syspassword = sysUser.getPassword();//实体类
 		String username = sysUser.getUsername();
 		// 生成token
-		String token = JwtUtil.sign(username, syspassword);
+		String token = JwtUtil.sign(username, syspassword);//得到token中包含的username
 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
 		// 设置超时时间
 		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME / 1000);

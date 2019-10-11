@@ -119,16 +119,16 @@
         description: '角色管理管理页面',
         // 表头
         columns: [
-          {
-            title: '角色Id',
-            dataIndex: '',
-            key:'rowIndex',
-            width:60,
-            align:"center",
-            customRender:function (t,r,index) {
-              return parseInt(index)+1;
-            }
-           },
+          // {
+          //   title: '角色Id',
+          //   dataIndex: '',
+          //   key:'rowIndex',
+          //   width:60,
+          //   align:"center",
+          //   customRender:function (t,r,index) {
+          //     return parseInt(index)+1;
+          //   }
+          //  },
 		   {
             title: '角色名称',
             align:"center",
@@ -167,7 +167,7 @@
   },
     methods: {
         handlePerssion: function(roleId){
-            // alert(roleId);
+            // alert(roleId); 显示角色ID是正确的
             this.$refs.modalUserRole.show(roleId);
         },
         onChangeDate(date, dateString) {

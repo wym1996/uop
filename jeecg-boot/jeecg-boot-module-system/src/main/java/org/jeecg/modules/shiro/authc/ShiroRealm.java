@@ -18,10 +18,13 @@ import org.jeecg.common.util.SpringContextUtils;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.system.entity.SysUser;
 import org.jeecg.modules.system.service.ISysUserService;
+import org.jeecg.modules.users.entity.User;
+import org.jeecg.modules.users.service.IUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,6 +43,9 @@ public class ShiroRealm extends AuthorizingRealm {
 	private ISysUserService sysUserService;
 	@Autowired
 	@Lazy
+	private IUserService userService;
+	@Autowired
+	@Lazy
 	private RedisUtil redisUtil;
 
 	/**
@@ -52,7 +58,9 @@ public class ShiroRealm extends AuthorizingRealm {
 
 	/**
 	 * 功能： 获取用户权限信息，包括角色以及权限。只有当触发检测用户权限时才会调用此方法，例如checkRole,checkPermission
-	 * 
+	 * PrincipalCollection是一个身份集合，因为我们现在就一个Realm，
+     * 所以直接调用getPrimaryPrincipal得到之前传入的用户名即可；
+     * 然后根据用户名调用UserService接口获取角色及权限信息
 	 * @param token token
 	 * @return AuthorizationInfo 权限信息
 	 */
@@ -97,7 +105,8 @@ public class ShiroRealm extends AuthorizingRealm {
 
 	/**
 	 * 校验token的有效性
-	 * 
+	 * @author wym
+	 * 修改原有认证信息
 	 * @param token
 	 */
 	public LoginUser checkUserTokenIsEffect(String token) throws AuthenticationException {
@@ -108,22 +117,30 @@ public class ShiroRealm extends AuthorizingRealm {
 		}
 
 		// 查询用户信息
+//		LoginUser loginUser = new LoginUser();
+//		SysUser sysUser = sysUserService.getUserByName(username);
+//		if (sysUser == null) {
+//			throw new AuthenticationException("用户不存在!");
+//		}
 		LoginUser loginUser = new LoginUser();
-		SysUser sysUser = sysUserService.getUserByName(username);
-		if (sysUser == null) {
+		User user = userService.getUserByName(username);
+		if (user == null) {
 			throw new AuthenticationException("用户不存在!");
 		}
 
 		// 校验token是否超时失效 & 或者账号密码是否错误
-		if (!jwtTokenRefresh(token, username, sysUser.getPassword())) {
+//		if (!jwtTokenRefresh(token, username, sysUser.getPassword())) {
+//			throw new AuthenticationException("Token失效，请重新登录!");
+//		}
+		if (!jwtTokenRefresh(token, username, user.getPassword())) {
 			throw new AuthenticationException("Token失效，请重新登录!");
 		}
-
 		// 判断用户状态
-		if (sysUser.getStatus() != 1) {
-			throw new AuthenticationException("账号已被锁定,请联系管理员!");
-		}
-		BeanUtils.copyProperties(sysUser, loginUser);
+//		if (sysUser.getStatus() != 1) {
+//			throw new AuthenticationException("账号已被锁定,请联系管理员!");
+//		}
+//		BeanUtils.copyProperties(sysUser, loginUser);
+		BeanUtils.copyProperties(user, loginUser);
 		return loginUser;
 	}
 

@@ -37,7 +37,7 @@ import io.swagger.annotations.ApiOperation;
 
  /**
  * @Description: 用户角色模块
- * @Author: jeecg-boot
+ * @Author: hBaby
  * @Date:   2019-09-25
  * @Version: V1.0
  */
@@ -48,7 +48,7 @@ import io.swagger.annotations.ApiOperation;
 public class UserRoleController {
 	@Autowired
 	private IUserRoleService userRoleService;
-	
+
 	/**
 	  * 分页列表查询
 	 * @param userRole
@@ -72,7 +72,7 @@ public class UserRoleController {
 		result.setResult(pageList);
 		return result;
 	}
-	
+
 	/**
 	  *   添加
 	 * @param userRole
@@ -92,7 +92,7 @@ public class UserRoleController {
 		}
 		return result;
 	}
-	
+
 	/**
 	  *  编辑
 	 * @param userRole
@@ -113,10 +113,10 @@ public class UserRoleController {
 				result.success("修改成功!");
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	  *   通过id删除
 	 * @param id
@@ -134,7 +134,7 @@ public class UserRoleController {
 		}
 		return Result.ok("删除成功!");
 	}
-	
+
 	/**
 	  *  批量删除
 	 * @param ids
@@ -153,7 +153,7 @@ public class UserRoleController {
 		}
 		return result;
 	}
-	
+
 	/**
 	  * 通过id查询
 	 * @param id

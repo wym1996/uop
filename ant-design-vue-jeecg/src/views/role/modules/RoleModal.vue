@@ -7,15 +7,15 @@
     @ok="handleOk"
     @cancel="handleCancel"
     cancelText="关闭">
-    
+
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
-      
+
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="角色名称">
-          <a-input placeholder="请输入角色名称" v-decorator="['name', {}]" />
+          <a-input placeholder="请输入角色名称" v-decorator="['roleName', {}]" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -29,7 +29,7 @@
           label="角色描述">
           <a-input placeholder="请输入角色描述" v-decorator="['description', {}]" />
         </a-form-item>
-		
+
       </a-form>
     </a-spin>
   </a-modal>
@@ -77,7 +77,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'name','value','description'))
+          this.form.setFieldsValue(pick(this.model,'roleName','value','description'))
 		  //时间格式化
         });
 
@@ -103,7 +103,7 @@
             }
             let formData = Object.assign(this.model, values);
             //时间格式化
-            
+
             console.log(formData)
             httpAction(httpurl,formData,method).then((res)=>{
               if(res.success){

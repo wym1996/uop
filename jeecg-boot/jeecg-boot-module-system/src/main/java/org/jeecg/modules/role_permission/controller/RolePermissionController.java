@@ -37,7 +37,7 @@ import io.swagger.annotations.ApiOperation;
 
  /**
  * @Description: 角色权限表
- * @Author: jeecg-boot
+ * @Author: hBaby
  * @Date:   2019-10-10
  * @Version: V1.0
  */
@@ -48,7 +48,7 @@ import io.swagger.annotations.ApiOperation;
 public class RolePermissionController {
 	@Autowired
 	private IRolePermissionService rolePermissionService;
-	
+
 	/**
 	  * 分页列表查询
 	 * @param rolePermission
@@ -72,7 +72,7 @@ public class RolePermissionController {
 		result.setResult(pageList);
 		return result;
 	}
-	
+
 	/**
 	  *   添加
 	 * @param rolePermission
@@ -92,7 +92,7 @@ public class RolePermissionController {
 		}
 		return result;
 	}
-	
+
 	/**
 	  *  编辑
 	 * @param rolePermission
@@ -113,10 +113,10 @@ public class RolePermissionController {
 				result.success("修改成功!");
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	  *   通过id删除
 	 * @param id
@@ -134,7 +134,7 @@ public class RolePermissionController {
 		}
 		return Result.ok("删除成功!");
 	}
-	
+
 	/**
 	  *  批量删除
 	 * @param ids
@@ -153,7 +153,7 @@ public class RolePermissionController {
 		}
 		return result;
 	}
-	
+
 	/**
 	  * 通过id查询
 	 * @param id

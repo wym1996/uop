@@ -5,10 +5,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * @Description: 角色管理
- * @Author: jeecg-boot
+ * @Author: hBaby
  * @Date:   2019-09-25
  * @Version: V1.0
  */
 public interface IRoleService extends IService<Role> {
 
+    public Role getRoleByName(String role_name);
 }

@@ -8,6 +8,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
@@ -21,6 +23,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
 import org.jeecg.modules.system.entity.SysRole;
+import org.jeecg.modules.users.entity.User;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -38,7 +41,7 @@ import io.swagger.annotations.ApiOperation;
 
  /**
  * @Description: 角色管理
- * @Author: jeecg-boot
+ * @Author: hBaby
  * @Date:   2019-09-25
  * @Version: V1.0
  */
@@ -82,19 +85,26 @@ public class RoleController {
 	@AutoLog(value = "角色管理-添加")
 	@ApiOperation(value="角色管理-添加", notes="角色管理-添加")
 	@PostMapping(value = "/add")
-	public Result<Role> add(@RequestBody Role role) {
-		Result<Role> result = new Result<Role>();
-		try {
-			roleService.save(role);
-			result.success("添加成功！");
-		} catch (Exception e) {
-			log.error(e.getMessage(),e);
-			result.error500("操作失败");
-		}
-		return result;
-	}
+    public Result<Role> add(@RequestBody JSONObject jsonObject) {
+        //public Result<User> add(@RequestBody Role role) {
+        Result<Role> result = new Result<Role>();
+        try {
+            Role role = JSON.parseObject(jsonObject.toJSONString(), Role.class);
+            Role role1 = roleService.getRoleByName(role.getRoleName());
+            if(role1!=null)
+                return result.error500("该角色已存在！");
+            role.setCreateTime(new Date());//设置创建时间
+            roleService.save(role);
+            result.success("添加成功！");
+        } catch (Exception e) {
+            log.error(e.getMessage(),e);
+            result.error500("操作失败");
+        }
+        return result;
+    }
 
-	/**
+
+     /**
 	  *  编辑
 	 * @param role
 	 * @return
@@ -175,6 +185,25 @@ public class RoleController {
 		return result;
 	}
 
+	 /**
+	  * 通过用户名查询
+	  * @param role_name
+	  * @return
+	  */
+	 @AutoLog(value = "用户模块-通过用户名查询")
+	 @ApiOperation(value="用户模块-通过用户名查询", notes="用户模块-通过用户名查询")
+	 @GetMapping(value = "/queryRoleByName")
+	 public Result<Role> queryByRoleName(@RequestParam(name="role_name",required=true) String role_name) {
+		 Result<Role> result = new Result<Role>();
+		 Role role = roleService.getRoleByName(role_name);
+		 if(role==null) {
+			 result.error500("未找到对应实体");
+		 }else {
+			 result.setResult(role);
+			 result.setSuccess(true);
+		 }
+		 return result;
+	 }
 	 @RequestMapping(value = "/queryall", method = RequestMethod.GET)
 	 public Result<List<Role>> queryall() {
 		 Result<List<Role>> result = new Result<>();

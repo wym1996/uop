@@ -19,6 +19,8 @@ public interface IUserService extends IService<User> {
      */
     public User getUserByName(String username);
 
+    public User getUserByName(String username);
+
     /**
      * 添加用户和用户角色关系
      * @param user

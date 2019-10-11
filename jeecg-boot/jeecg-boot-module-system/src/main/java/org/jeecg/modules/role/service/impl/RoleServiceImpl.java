@@ -7,13 +7,22 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import javax.annotation.Resource;
+
 /**
  * @Description: 角色管理
- * @Author: jeecg-boot
+ * @Author: hBaby
  * @Date:   2019-09-25
  * @Version: V1.0
  */
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IRoleService {
 
+    @Resource
+    private RoleMapper roleMapper;
+
+    @Override
+    public Role getRoleByName(String role_name) {
+        return roleMapper.getRoleByName(role_name);
+    }
 }

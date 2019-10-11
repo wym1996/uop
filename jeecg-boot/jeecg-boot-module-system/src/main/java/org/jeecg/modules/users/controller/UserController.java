@@ -8,15 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONObject;
-import com.sun.xml.internal.bind.v2.TODO;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
-import org.jeecg.modules.role.entity.Role;
-import org.jeecg.modules.system.entity.SysUser;
-import org.jeecg.modules.system.entity.SysUserRole;
 import org.jeecg.modules.user_role.entity.UserRole;
 import org.jeecg.modules.user_role.service.IUserRoleService;
 import org.jeecg.modules.users.entity.User;
@@ -33,7 +28,6 @@ import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -98,7 +92,8 @@ public class UserController {
 		String selectedRoles = jsonObject.getString("selectedroles");
 		try {
 			User user = JSON.parseObject(jsonObject.toJSONString(), User.class);
-			if(user.getIdcard()!=null)
+			User user1 = userService.getUserByName(user.getUsername());
+			if(user1!=null)
 				return result.error500("该用户已存在！");
 			//System.out.println(user);
 			user.setCreateTime(new Date());//设置创建时间
@@ -195,6 +190,25 @@ public class UserController {
 	public Result<User> queryById(@RequestParam(name="id",required=true) String id) {
 		Result<User> result = new Result<User>();
 		User user = userService.getById(id);
+		if(user==null) {
+			result.error500("未找到对应实体");
+		}else {
+			result.setResult(user);
+			result.setSuccess(true);
+		}
+		return result;
+	}
+	/**
+	  * 通过用户名查询
+	 * @param username
+	 * @return
+	 */
+	@AutoLog(value = "用户模块-通过用户名查询")
+	@ApiOperation(value="用户模块-通过用户名查询", notes="用户模块-通过用户名查询")
+	@GetMapping(value = "/queryByUserName")
+	public Result<User> queryByUserName(@RequestParam(name="username",required=true) String username) {
+		Result<User> result = new Result<User>();
+		User user = userService.getUserByName(username);
 		if(user==null) {
 			result.error500("未找到对应实体");
 		}else {

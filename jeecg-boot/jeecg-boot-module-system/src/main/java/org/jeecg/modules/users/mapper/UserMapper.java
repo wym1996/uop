@@ -22,11 +22,6 @@ public interface UserMapper extends BaseMapper<User> {
      */
     public User getUserByName(@Param("username") String username);
 
-    /**
-     * 通过用户账号查询用户信息
-     * @param username
-     * @return
-     */
 
     /**
      * @Author wym
@@ -35,4 +30,5 @@ public interface UserMapper extends BaseMapper<User> {
      * @return
      */
     // public String getPasswordByUsername(String username);
+
 }

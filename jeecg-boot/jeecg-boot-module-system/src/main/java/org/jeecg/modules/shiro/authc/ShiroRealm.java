@@ -87,7 +87,7 @@ public class ShiroRealm extends AuthorizingRealm {
 
 	/**
 	 * 功能： 用来进行身份认证，也就是说验证用户输入的账号和密码是否正确，获取身份验证信息，错误抛出异常
-	 * 
+	 *
 	 * @param authenticationToken 用户身份信息 token
 	 * @return 返回封装了用户信息的 AuthenticationInfo 实例
 	 */

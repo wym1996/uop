@@ -79,7 +79,7 @@ public class UserController {
 
 	/**
 	  *   添加
-	 * @param user
+	 * @param
 	 * @return
 	 */
 	@AutoLog(value = "用户模块-添加")
@@ -109,7 +109,7 @@ public class UserController {
 
 	/**
 	  *  编辑
-	 * @param user
+	 * @param
 	 * @return
 	 */
 	@AutoLog(value = "用户模块-编辑")
@@ -237,6 +237,7 @@ public class UserController {
 		 Result<List<String>> result = new Result<>();
 		 List<String> list = new ArrayList<String>();
 		 List<UserRole> userRole = userRoleService.list(new QueryWrapper<UserRole>().lambda().eq(UserRole::getUserId, userid));
+         //System.out.println(userRole);  返回的是userRole实体类中的对象
 		 if (userRole == null || userRole.size() <= 0) {
 			 result.error500("未找到用户相关角色信息");
 		 } else {

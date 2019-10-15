@@ -13,12 +13,11 @@
 
         <a-form-item label="父级用户" :labelCol="labelCol" :wrapperCol="wrapperCol" >
           <a-select
-            mode="multiple"
             style="width: 100%"
             placeholder="请选择父级用户"
             optionFilterProp = "children"
             v-decorator="['fid', {}]"
-            v-model="fid">
+            >
             <a-select-option v-for="(user,userindex) in userList" :key="userindex.toString()" :value="user.id">
               {{ user.username }}
             </a-select-option>
@@ -60,7 +59,7 @@
           label="所属机构">
           <a-input placeholder="请输入所属机构" v-decorator="['affiliation', {}]" />
         </a-form-item>
-        <a-form-item label="角色分配" :labelCol="labelCol" :wrapperCol="wrapperCol" v-show="!roleDisabled" >
+        <a-form-item label="角色分配" :labelCol="labelCol" :wrapperCol="wrapperCol" >
           <a-select
             mode="multiple"
             style="width: 100%"
@@ -96,7 +95,6 @@
         roleList:[],    //下拉列表的值
         userList:[],    //下拉列表的值
         selectedRole:[],
-        fid:[],
         labelCol: {
           xs: { span: 24 },
           sm: { span: 5 },
@@ -140,7 +138,7 @@
           }
         });
       },
-      loadUserRoles(userid){
+      loadUserRoles(userid){   //编辑时根据用户ID查询当前用户已拥有角色
         queryUserRole({userid:userid}).then((res)=>{
           if(res.success){
             this.selectedRole = res.result;
@@ -149,6 +147,8 @@
           }
         });
       },
+
+
       add () {
         this.edit({});
       },
@@ -165,9 +165,11 @@
         that.userId = record.id;
 
 
+
+
         this.model = Object.assign({}, record);
         this.visible = true;
-        this.$nextTick(() => {
+        this.$nextTick(() => {  //表单显示默认值
           this.form.setFieldsValue(pick(this.model,'fid','username','password','idcard','deptname','affiliation'))
 		  //时间格式化
         });
@@ -179,7 +181,7 @@
 
         this.disableSubmit = false;
         this.selectedRole = [];
-        this.fid = [];
+        //this.selectedFid= [];
 
       },
       moment,
@@ -199,9 +201,8 @@
                method = 'put';
             }
             let formData = Object.assign(this.model, values);
-            console.log(formData);
             formData.selectedroles = this.selectedRole.length>0?this.selectedRole.join(","):'';
-            formData.fid = this.fid.length>0?this.fid.join(","):'';
+           // formData.selectedFids = this.selectedFid.length>0?this.selectedFid.join(","):'';
 
             //时间格式化
 

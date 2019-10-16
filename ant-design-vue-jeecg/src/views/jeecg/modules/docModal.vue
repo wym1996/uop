@@ -27,7 +27,10 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="类型">
-          <a-input placeholder="请输入类型" v-decorator="['type', {}]" />
+          <a-select placeholder="请选择类型" v-decorator="['type', {}]" style="width: 120px">
+          <a-select-option value="文档">文档</a-select-option>
+          <a-select-option value="工具">工具</a-select-option>
+        </a-select>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -45,7 +48,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="描述">
-          <a-input placeholder="请输入描述" v-decorator="['description', {}]" />
+          <a-textarea placeholder="请输入描述" rows="10" v-decorator="['description', {}]" />
         </a-form-item>
         <a-form-item label="上传文件" :labelCol="labelCol" :wrapperCol="wrapperCol" v-has="'user:upload'">
           <a-upload

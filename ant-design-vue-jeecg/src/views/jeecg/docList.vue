@@ -87,7 +87,6 @@
 
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)" v-has="'user:edit'">编辑</a>
-
           <a-divider type="vertical" />
           <a-dropdown>
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
@@ -113,18 +112,22 @@
 
     <!-- 表单区域 -->
     <doc-modal ref="modalForm" @ok="modalFormOk"></doc-modal>
+    <show-detail ref="modalForm2" @ok="modalFormOk2"></show-detail>
   </a-card>
 </template>
 
 <script>
   import docModal from './modules/docModal'
+  import ShowDetail from './modules/ShowDetail'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+  import { getAction } from '@/api/manage'
 
   export default {
     name: "docList",
     mixins:[JeecgListMixin],
     components: {
-      docModal
+      docModal,
+      ShowDetail
     },
     data () {
       return {
@@ -166,11 +169,11 @@
             align:"center",
             dataIndex: 'reference'
            },
-		   {
-            title: '描述',
-            align:"center",
-            dataIndex: 'description'
-           },
+		   //{
+            //title: '描述',
+            //align:"center",
+            //dataIndex: 'description'
+           //},
 		   {
             title: '发布时间',
             align:"center",
@@ -203,6 +206,20 @@
       }
     },
     methods: {
+      handleDetail:function(record){
+        getAction(this.url.detail,{createBy:record.createBy}).then((res)=>{
+          if(res.success){
+            this.loadData();
+          }
+        });
+        this.$refs.modalForm2.detail(record);
+      },
+
+      modalFormOk2() {
+        // 新增/修改 成功时，重载列表
+        this.loadData();
+      },
+
       handleDownload: function (value) {
         window.open(value.downloadpath)
       },

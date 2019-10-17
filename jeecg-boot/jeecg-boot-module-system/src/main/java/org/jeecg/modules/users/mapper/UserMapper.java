@@ -14,21 +14,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @Version: V1.0
  */
 public interface UserMapper extends BaseMapper<User> {
+
     /**
-     * @Author wym
-     * 通过用户名查找用户
+     * 通过用户名查询用户信息
      * @param username
      * @return
      */
     public User getUserByName(@Param("username") String username);
-
-
-    /**
-     * @Author wym
-     * 通过用户名在数据库中查找用户密码
-     * @param username
-     * @return
-     */
-    // public String getPasswordByUsername(String username);
-
 }

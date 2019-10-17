@@ -31,7 +31,8 @@
   import Contextmenu from '@/components/menu/Contextmenu'
   import { mixin, mixinDevice } from '@/utils/mixin.js'
 
-  const indexKey = '/dashboard/analysis'
+  //const indexKey = '/dashboard/analysis'
+  const indexKey = '/account/center'
 
   export default {
     name: 'TabLayout',
@@ -66,12 +67,12 @@
     created() {
       if (this.$route.path != indexKey) {
         this.pageList.push({
-          name: 'dashboard-analysis',
+          name: 'account-center',
           path: indexKey,
           fullPath: indexKey,
           meta: {
-            icon: 'dashboard',
-            title: '首页'
+            icon: 'user',
+            title: '个人中心'
           }
         })
         this.linkList.push(indexKey)
@@ -116,7 +117,7 @@
       },
       remove(key) {
         if (key == indexKey) {
-          this.$message.warning('首页不能关闭!')
+          this.$message.warning('用户管理页不能关闭!')
           return
         }
         if (this.pageList.length === 1) {

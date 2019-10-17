@@ -138,7 +138,7 @@
           }
         });
       },
-      loadUserRoles(userid){   //编辑时根据用户ID查询当前用户已拥有角色
+      loadUserRoles(userid){
         queryUserRole({userid:userid}).then((res)=>{
           if(res.success){
             this.selectedRole = res.result;
@@ -147,8 +147,6 @@
           }
         });
       },
-
-
       add () {
         this.edit({});
       },
@@ -165,11 +163,9 @@
         that.userId = record.id;
 
 
-
-
         this.model = Object.assign({}, record);
         this.visible = true;
-        this.$nextTick(() => {  //表单显示默认值
+        this.$nextTick(() => {
           this.form.setFieldsValue(pick(this.model,'fid','username','password','idcard','deptname','affiliation'))
 		  //时间格式化
         });
@@ -181,7 +177,7 @@
 
         this.disableSubmit = false;
         this.selectedRole = [];
-        //this.selectedFid= [];
+
 
       },
       moment,
@@ -201,8 +197,8 @@
                method = 'put';
             }
             let formData = Object.assign(this.model, values);
+            console.log(formData);
             formData.selectedroles = this.selectedRole.length>0?this.selectedRole.join(","):'';
-           // formData.selectedFids = this.selectedFid.length>0?this.selectedFid.join(","):'';
 
             //时间格式化
 

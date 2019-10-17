@@ -30,7 +30,7 @@ import javax.annotation.Resource;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
     @Resource
     private UserRoleMapper userRoleMapper;
-    @Autowired
+    @Resource
     private UserMapper userMapper;
     @Override
     public User getUserByName(String username) {
@@ -82,7 +82,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         this.updateById(user);
         //先删后加
         userRoleMapper.delete(new QueryWrapper<UserRole>().lambda().eq(UserRole::getUserId, user.getId()));
-        System.out.println();
+     //   System.out.println();
         if(oConvertUtils.isNotEmpty(roles)) {
             String[] arr = roles.split(",");
             for (String roleId : arr) {

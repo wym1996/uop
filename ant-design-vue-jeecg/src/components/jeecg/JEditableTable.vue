@@ -785,7 +785,6 @@
       },
       /** 添加一行 */
       add(num = 1, forceScrollToBottom = false) {
-       // console.log("aaa");
         if (num < 1) return
         // let timestamp = new Date().getTime()
         let rows = this.rows

@@ -121,7 +121,7 @@ public class SysPermissionController {
 			}
 			log.info(" ------ 通过令牌获取用户拥有的访问菜单 ---- TOKEN ------ " + token);
 			String username = JwtUtil.getUsername(token);
-			System.out.println(username);//可以获得登录的用户名
+			//System.out.println(username);//可以获得登录的用户名
 			//List<SysPermission> metaList = sysPermissionService.queryByUser(username);
 			List<SysPermission> metaList = sysPermissionService.queryPermissionByUser(username);
 			PermissionDataUtil.addIndexPage(metaList);

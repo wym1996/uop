@@ -50,6 +50,13 @@ public class RolePermission implements Serializable {
     @ApiModelProperty(value = "权限id")
     private java.lang.String permissionId;
 
+
+    /**
+     * 数据权限
+     * 2019-10-20 wym添加 测试
+     */
+    private String dataRuleIds;
+
     public RolePermission() {
     }
 

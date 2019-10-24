@@ -21,4 +21,11 @@ public interface RoleMapper extends BaseMapper<Role> {
      * @return
      */
     public Role getRoleByName(@Param("role_name") String role_name);
+
+    /**
+     * 2019-10-24 wym
+     * 通过用户id该用户所拥有角色
+     */
+    public List<Role> getRoleByCurrentUser(String userId);
+
 }

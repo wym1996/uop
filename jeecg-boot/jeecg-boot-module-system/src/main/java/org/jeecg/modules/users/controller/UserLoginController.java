@@ -9,8 +9,10 @@ import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.PasswordUtil;
 import org.jeecg.common.util.RedisUtil;
+import org.jeecg.modules.role.service.IRoleService;
 import org.jeecg.modules.system.model.SysLoginModel;
 import org.jeecg.modules.users.entity.User;
+import org.jeecg.modules.role.entity.Role;
 import org.jeecg.modules.users.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +33,8 @@ public class UserLoginController {
     private IUserService userService;
     @Autowired
     private RedisUtil redisUtil;
+    @Autowired
+    private IRoleService roleService;
 
     //使用用户名和密码登录
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
@@ -79,7 +83,11 @@ public class UserLoginController {
         redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
         // 设置超时时间
         redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME / 1000);
-//
+        String userId=user.getId();
+       // user.setCurrentUserRole((Role) roleService.getRoleByCurrentUser(userId));
+       roleService.getRoleByCurrentUser(userId);
+        System.out.println(roleService.getRoleByCurrentUser(userId));
+        user.setCurrentUserRole(roleService.getRoleByCurrentUser(userId));
 //        // 获取用户部门信息
          JSONObject obj = new JSONObject();
 //        List<SysDepart> departs = sysDepartService.queryUserDeparts(sysUser.getId());
@@ -92,6 +100,7 @@ public class UserLoginController {
 //        } else {
 //            obj.put("multi_depart", 2);
 //        }
+
         obj.put("token", token);
         obj.put("userInfo", user);
         result.setResult(obj);

@@ -6,4 +6,7 @@
     <select id="getRoleByName" resultType="org.jeecg.modules.role.entity.Role">
         select * from  role  where role_name = #{role_name}
     </select>
+    <select id="getRoleByCurrentUser" resultType="org.jeecg.modules.role.entity.Role">
+        select * from role r ,user_role u where r.id=u.role_id and u.user_id=#{userId}
+    </select>
 </mapper>

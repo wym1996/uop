@@ -18,10 +18,13 @@ import org.jeecg.common.constant.CacheConstant;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.modules.role_permission.service.IRolePermissionService;
 import org.jeecg.modules.system.entity.SysPermission;
 import org.jeecg.modules.system.entity.SysPermissionDataRule;
 import org.jeecg.modules.system.entity.SysRole;
 import org.jeecg.modules.system.entity.SysRolePermission;
+//
+import org.jeecg.modules.role_permission.entity.RolePermission;
 import org.jeecg.modules.system.model.TreeModel;
 import org.jeecg.modules.system.service.ISysPermissionDataRuleService;
 import org.jeecg.modules.system.service.ISysPermissionService;
@@ -69,7 +72,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SysRoleController {
 	@Autowired
 	private ISysRoleService sysRoleService;
-	
+
 	@Autowired
 	private ISysPermissionDataRuleService sysPermissionDataRuleService;
 	
@@ -78,6 +81,13 @@ public class SysRoleController {
 	
 	@Autowired
 	private ISysPermissionService sysPermissionService;
+
+	@Autowired
+	private IRolePermissionService iRolePermissionService;
+
+
+
+
 
 	/**
 	  * 分页列表查询
@@ -324,6 +334,7 @@ public class SysRoleController {
 					.eq(SysRolePermission::getPermissionId, permissionId)
 					.eq(SysRolePermission::getRoleId,roleId);
 			SysRolePermission sysRolePermission = sysRolePermissionService.getOne(query);
+//			System.out.println("1"+sysRolePermission);//1null
 			if(sysRolePermission==null) {
 				//return Result.error("未找到角色菜单配置信息");
 			}else {
@@ -338,7 +349,8 @@ public class SysRoleController {
 	}
 	
 	/**
-	 * 保存数据规则至角色菜单关联表
+	 * 保存数据规则至角色菜单关联表(role_permission表）
+	 * 2019-10-20 wym 修改测试
 	 */
 	@PostMapping(value = "/datarule")
 	public Result<?> saveDatarule(@RequestBody JSONObject jsonObject) {
@@ -351,12 +363,23 @@ public class SysRoleController {
 					.eq(SysRolePermission::getPermissionId, permissionId)
 					.eq(SysRolePermission::getRoleId,roleId);
 			SysRolePermission sysRolePermission = sysRolePermissionService.getOne(query);
+			System.out.println(sysRolePermission);
 			if(sysRolePermission==null) {
-				return Result.error("请先保存角色菜单权限!");
+				//return Result.error("请先保存角色菜单权限!");
 			}else {
 				sysRolePermission.setDataRuleIds(dataRuleIds);
 				this.sysRolePermissionService.updateById(sysRolePermission);
 			}
+			/*LambdaQueryWrapper<RolePermission> query = new LambdaQueryWrapper<RolePermission>()
+					.eq(RolePermission::getPermissionId, permissionId)
+					.eq(RolePermission::getRoleId,roleId);
+			RolePermission rolePermission = iRolePermissionService.getOne(query);
+			if(rolePermission==null) {  //rolepermission为空
+				return Result.error("请先保存角色菜单权限!");
+			}else {
+				rolePermission.setDataRuleIds(dataRuleIds);
+				this.iRolePermissionService.updateById(rolePermission);
+			}*/
 		} catch (Exception e) {
 			log.error("SysRoleController.saveDatarule()发生异常：" + e.getMessage());
 			return Result.error("保存失败");

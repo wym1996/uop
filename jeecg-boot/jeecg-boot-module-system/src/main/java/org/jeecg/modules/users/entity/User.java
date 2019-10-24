@@ -2,6 +2,8 @@ package org.jeecg.modules.users.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -12,6 +14,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.jeecg.modules.role.entity.Role;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
@@ -79,4 +82,20 @@ public class User implements Serializable {
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "修改时间")
 	private java.util.Date updateTime;
+
+
+    public List<Role> getCurrentUserRole() {
+        return currentUserRole;
+    }
+
+    public void setCurrentUserRole(List<Role> currentUserRole) {
+        this.currentUserRole = currentUserRole;
+    }
+
+    /***
+	 * 测试用，在User中加入返回用户拥有的角色信息（角色id,角色名role_name）
+	 */
+	private List<Role> currentUserRole;
+
+
 }

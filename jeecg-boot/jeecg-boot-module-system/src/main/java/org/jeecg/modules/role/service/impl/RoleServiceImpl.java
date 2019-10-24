@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Description: 角色管理
@@ -24,5 +25,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
     @Override
     public Role getRoleByName(String role_name) {
         return roleMapper.getRoleByName(role_name);
+    }
+
+    @Override
+    public List<Role> getRoleByCurrentUser(String userId){
+        return roleMapper.getRoleByCurrentUser(userId);
     }
 }

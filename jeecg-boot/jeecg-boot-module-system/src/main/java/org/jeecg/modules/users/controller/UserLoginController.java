@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
-import org.jeecg.common.util.PasswordUtil;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.modules.role.service.IRoleService;
 import org.jeecg.modules.system.model.SysLoginModel;
@@ -19,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Auther wym
@@ -83,11 +85,10 @@ public class UserLoginController {
         redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
         // 设置超时时间
         redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME / 1000);
+        //获取当前登录用户所拥有的角色，将结果放入result中
         String userId=user.getId();
-       // user.setCurrentUserRole((Role) roleService.getRoleByCurrentUser(userId));
-       roleService.getRoleByCurrentUser(userId);
-        System.out.println(roleService.getRoleByCurrentUser(userId));
-        user.setCurrentUserRole(roleService.getRoleByCurrentUser(userId));
+        List<Role> roleList=roleService.getRoleByCurrentUser(userId);
+        System.out.println(roleList);
 //        // 获取用户部门信息
          JSONObject obj = new JSONObject();
 //        List<SysDepart> departs = sysDepartService.queryUserDeparts(sysUser.getId());
@@ -103,6 +104,7 @@ public class UserLoginController {
 
         obj.put("token", token);
         obj.put("userInfo", user);
+        obj.put("currentUserRole",roleList);
         result.setResult(obj);
         result.success("登录成功");
         return result;

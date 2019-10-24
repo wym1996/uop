@@ -22,7 +22,7 @@
               size="large"
               type="password"
               autocomplete="false"
-              placeholder="密码 / 123456">
+              placeholder="密码 / 请输入密码">
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
@@ -168,9 +168,15 @@
 
               that.Login(loginParams).then((res) => {
                 this.departConfirm(res)
+                  const userRole=JSON.stringify(res.result.currentUserRole);
+                  //console.log(userRole);
+                  //console.log(JSON.parse(userRole));
+                 localStorage.setItem('currentUserRole',userRole);
               }).catch((err) => {
                 that.requestFailed(err);
               });
+
+
 
 
             }else {

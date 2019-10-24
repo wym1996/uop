@@ -84,18 +84,18 @@ public class User implements Serializable {
 	private java.util.Date updateTime;
 
 
-    public List<Role> getCurrentUserRole() {
-        return currentUserRole;
-    }
-
-    public void setCurrentUserRole(List<Role> currentUserRole) {
-        this.currentUserRole = currentUserRole;
-    }
-
-    /***
-	 * 测试用，在User中加入返回用户拥有的角色信息（角色id,角色名role_name）
-	 */
-	private List<Role> currentUserRole;
+//    public List<Role> getCurrentUserRole() {
+//        return currentUserRole;
+//    }
+//
+//    public void setCurrentUserRole(List<Role> currentUserRole) {
+//        this.currentUserRole = currentUserRole;
+//    }
+//
+//    /***
+//	 * 测试用，在User中加入返回用户拥有的角色信息（角色id,角色名role_name）
+//	 */
+//	private List<Role> currentUserRole;
 
 
 }

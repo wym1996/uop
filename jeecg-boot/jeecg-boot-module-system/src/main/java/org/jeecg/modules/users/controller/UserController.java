@@ -198,6 +198,27 @@ public class UserController {
 		}
 		return result;
 	}
+
+	 /**
+	  * 通过fid查询
+	  * @param fid
+	  * @return
+	  */
+	 @AutoLog(value = "用户模块-通过fid查询")
+	 @ApiOperation(value="用户模块-通过id查询", notes="用户模块-通过fid查询")
+	 @GetMapping(value = "/queryByFid")
+	 public Result<List<User>> queryByFid(@RequestParam(name="fid",required=true) String fid) {
+		 Result<List<User>> result = new Result<List<User>>();
+		 List<User> user = userService.getUserByFid(fid);
+		 if(user==null||user.size()<=0) {
+			 result.error500("未找到对应实体");
+		 }else {
+			 result.setResult(user);
+			 result.setSuccess(true);
+		 }
+		 return result;
+	 }
+
 	/**
 	  * 通过用户名查询
 	 * @param username

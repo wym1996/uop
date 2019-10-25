@@ -6,4 +6,8 @@
     <select id="getUserByName" resultType="org.jeecg.modules.users.entity.User">
         select * from  user  where username = #{username}
     </select>
+    <!-- 根据父级id查询 -->
+    <select id="getUserByFid" resultType="org.jeecg.modules.users.entity.User">
+        select * from  user  where fid = #{fid}
+    </select>
 </mapper>

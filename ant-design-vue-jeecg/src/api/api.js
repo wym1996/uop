@@ -24,6 +24,7 @@ const editUser = (params)=>putAction("/users/user/edit",params);
 const queryUserRole = (params)=>getAction("/users/user/queryUserRole",params);
 const getUserList = (params)=>getAction("/users/user/list",params);
 const queryallUsers = (params)=>getAction("/users/user/queryallUsers",params);
+const queryInsider=(params)=>getAction("/users/user/queryByFid")
 // const deleteUser = (params)=>deleteAction("/sys/user/delete",params);
 // const deleteUserList = (params)=>deleteAction("/sys/user/deleteBatch",params);
 const frozenBatch = (params)=>putAction("/sys/user/frozenBatch",params);
@@ -104,6 +105,7 @@ export {
   queryUserRole,
   getUserList,
   queryallUsers,
+  queryInsider,
   queryall,
   frozenBatch,
   checkOnlyUser,

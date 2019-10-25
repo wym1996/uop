@@ -21,4 +21,11 @@ public interface UserMapper extends BaseMapper<User> {
      * @return
      */
     public User getUserByName(@Param("username") String username);
+
+    /**
+     * 通过fid查询用户信息
+     * @param fid
+     * @return
+     */
+    public List<User> getUserByFid(@Param("fid") String fid);
 }

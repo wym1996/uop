@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Description: 用户模块
@@ -36,6 +37,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public User getUserByName(String username) {
         return userMapper.getUserByName(username);
     }
+
+    @Override
+    public List<User> getUserByFid(String fid) {
+        return userMapper.getUserByFid(fid);
+    }
+
     @Override
     public Result<?> checkUser(User user) {
         Result<?> result = new Result<Object>();

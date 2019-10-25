@@ -17,6 +17,8 @@ public interface IUserService extends IService<User> {
 
     public User getUserByName(String username);
 
+    public List<User> getUserByFid(String fid);
+
     /**
      * 添加用户和用户角色关系
      * @param user

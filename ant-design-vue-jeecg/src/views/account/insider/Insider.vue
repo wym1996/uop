@@ -98,22 +98,24 @@
     <!-- table区域-end -->
 
     <!-- 表单区域 -->
-    <insider ref="modalForm" @ok="modalFormOk"></insider>
+    <insider-modal ref="modalForm" @ok="modalFormOk"></insider-modal>
     <!--<user-modal ref="modalForm" @ok="modalFormOk"></user-modal>-->
   </a-card>
 </template>
 
 <script>
-  import Insider from './modules/Insider'
+  import InsiderModal from './modules/InsiderModal'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 
   export default {
     name: "Insider",
     mixins:[JeecgListMixin],
     components: {
-      Insider
+      InsiderModal
     },
     data () {
+     // console.log((JSON.parse(localStorage.getItem("pro__Login_Userinfo"))).value.id);
+     // console.log(localStorage.getItem("pro__Login_Userinfo"));
       return {
         description: '用户模块管理页面',
         // 表头
@@ -166,7 +168,7 @@
           }
         ],
 		url: {
-          list: `/users/user/queryByFid?fid=1`,
+          list: `/users/user/queryByFid?fid=${(JSON.parse(localStorage.getItem("pro__Login_Userinfo"))).value.id}`,
           delete: "/users/user/delete",
           deleteBatch: "/users/user/deleteBatch",
           exportXlsUrl: "users/user/exportXls",

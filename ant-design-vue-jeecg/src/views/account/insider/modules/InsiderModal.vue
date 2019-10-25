@@ -23,12 +23,7 @@
             </a-select-option>
           </a-select>
         </a-form-item>
-        <!--<a-form-item-->
-          <!--:labelCol="labelCol"-->
-          <!--:wrapperCol="wrapperCol"-->
-          <!--label="父级id">-->
-          <!--<a-input placeholder="请输入父级id" v-decorator="['fid', {}]" />-->
-        <!--</a-form-item>-->
+
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
@@ -86,7 +81,7 @@
   import moment from "moment"
 
   export default {
-    name: "Insider",
+    name: "InsiderModal",
     data () {
       return {
         title:"操作",
